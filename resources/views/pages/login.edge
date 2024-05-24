@@ -1,0 +1,54 @@
+@component('layouts/main')
+<form action="">
+    <section class="is-relative section has-background-light">
+        <div class="columns is-vcentered">
+            <div class="column is-6 mb-8">
+                <div class="title is-2 mb-0">Welcome!</div>
+                <p class="is-size-5 has-text-grey-dark">Jewellery Gifting</p>
+            </div>
+            <div class="column is-5">
+                <div class="box has-background-white has-text-centered">
+                    <form action="#">
+                        <h3 class="title is-4 mt-4 mb-3">Sign In</h3>
+                        <div class="mb-2">
+                            <div class="control has-icons-left mb-1">
+                                <input class="input" type="email" placeholder="anything@email.com" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-envelope"></i>
+                                </span>
+                            </div>
+                            <div class="control has-icons-left">
+                                <input type="password" placeholder="Password" class="input" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button class="button is-primary is-fullwidth">Login</button>
+                        <small><a href="#">Forgot password</a></small>
+                        <hr class="my-2">
+                        <div class="pt-3 mt-8">
+                            <a class="button is-dark is-fullwidth mb-2" href="#">
+                                <span class="icon">
+                                    <i class="fa-brands fa-google"></i>
+                                </span>
+                                <span class="has-text-white">Sign in with Google</span>
+                            </a>
+                            <a class="button is-info is-fullwidth mb-2" href="#">
+                                <span class="icon">
+                                    <i class="fa-brands fa-twitter"></i>
+                                </span>
+                                <span class="has-text-white">Sign in with Twitter</span>
+                            </a>
+                            <small><a href="#">No Login</a></small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<a href="/">Home Page</a>
+@end
