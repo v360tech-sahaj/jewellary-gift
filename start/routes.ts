@@ -13,6 +13,4 @@ router.on('/').render('pages/home')
 
 router.on('/login').render('pages/login')
 
-router.on('/template').render('pages/templates')
-
 router.on('/assets').render('pages/assets')

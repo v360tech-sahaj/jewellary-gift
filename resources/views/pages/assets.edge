@@ -1,22 +1,213 @@
+<style>
+  .step {
+    display: none;
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .step.active {
+    display: block;
+    opacity: 1;
+  }
+</style>
 @component('layouts/main')
-<section class="hero is-small is-primary mb-2">
-    <div class="hero-body">
-        <p class="title">Assets</p>
-    </div>
-</section>
-<p class="is-size-5">Step 1</p>
-<p class="subtitle mb-3 is-size-6">Add Assets</p>
-<div class="box">
-    <div class="has-text-centered">QR scanner</div>
-    <hr class="my-2">
-    <div>
-        <div class="control has-icons-left mb-1">
-            <input class="input" type="number" placeholder="Enter asset number" required>
-            <span class="icon is-small is-left">
-                <i class="fas fa-pen"></i>
-            </span>
+<div class="container">
+  <a href="/">Home Page</a>
+  <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
+  <form action="#" id="multiStepForm">
+    {{-- Step 1 --}}
+    <div class="step active" id="step1">
+      <section class="hero is-small is-primary mb-2 p-0">
+        <div class="hero-body">
+          <p class="title is-size-5">Step 1</p>
+          <p class="subtitle is-size-6">Add Assets</p>
         </div>
+      </section>
+      <div class="box">
+        <div class="has-text-centered">QR scanner</div>
+        <div class="divider my-2">OR</div>
+        <div class="control has-icons-left mb-2">
+          <input class="input" type="number" placeholder="Enter asset number">
+          <span class="icon is-small is-left">
+            <i class="fas fa-pen"></i>
+          </span>
+        </div>
+        <div class="control">
+          <button class="button is-small is-link" type="button" onclick="nextStep()">Next</button>
+        </div>
+      </div>
     </div>
+
+    {{-- Step 2 --}}
+    <div class="step" id="step2">
+      <section class="hero is-small is-primary mb-2 p-0">
+        <div class="hero-body">
+          <p class="title is-size-5">Step 2</p>
+          <p class="subtitle is-size-6">Select templates</p>
+        </div>
+      </section>
+      <div class="box">
+        <div class="fixed-grid has-5-cols-desktop mb-2">
+          <div class="grid has-text-centered">
+            <div class="cell">
+              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+            </div>
+            <div class="cell">
+              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+            </div>
+            <div class="cell">
+              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+            </div>
+            <div class="cell">
+              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+            </div>
+            <div class="cell">
+              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+            </div>
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-small is-link is-light" type="button" onclick="prevStep()">Previous</button>
+          </div>
+          <div class="control">
+            <button class="button is-small is-link" type="button" onclick="nextStep()">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{-- Step 3 --}}
+    <div class="step" id="step3">
+      <section class="hero is-small is-primary mb-2 p-0">
+        <div class="hero-body">
+          <p class="title is-size-5">Step 3</p>
+          <p class="subtitle is-size-6">Enter template details</p>
+        </div>
+      </section>
+      <div class="box">
+        <div class="mb-2">
+          <div class="file has-name is-centered is-boxed is-small mb-0">
+            <label class="file-label">
+              <input class="file-input" type="file" id="file-input" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label"> Choose a file… </span>
+              </span>
+              <span class="file-name has-text-centered" id="file-name"> No file selected </span>
+            </label>
+          </div>
+          <div class="divider my-2">OR</div>
+          <div class="control has-icons-left mb-2">
+            <input class="input" type="text" placeholder="Any Special Message">
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+          </div>
+          <div class="divider my-2">OR</div>
+          <p class="has-text-centered">Capture a video message</p>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-small is-link is-light" type="button" onclick="prevStep()">Previous</button>
+          </div>
+          <div class="control">
+            <button class="button is-small is-link" type="button" onclick="nextStep()">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{-- Summary --}}
+    <div class="step" id="summary">
+      <section class="hero is-small is-primary mb-2 p-0">
+        <div class="hero-body">
+          <p class="title is-size-5">Step 4</p>
+          <p class="subtitle is-size-6">Checkout</p>
+        </div>
+      </section>
+      <div class="box">
+
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-48x48">
+              <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4">template name</p>
+            <p class="subtitle is-6">template detail</p>
+          </div>
+          <div>
+            <p>$200.00</p>
+          </div>
+        </div>
+        <div class="columns pr-5 is-mobile">
+          <div class="column is-fullwidth is-four-fifths pr-0">
+            <input class="input" type="number" placeholder="Enter promo code">
+          </div>
+          <div class="column"><button class="button is-fullwidth">Apply</button></div>
+        </div>
+
+        <div>
+          <span>Subtotal</span>
+          <span class="is-pulled-right">$200.00</span>
+        </div>
+
+        <div>
+          <span>Discount</span>
+          <span class="is-pulled-right">$50.00</span>
+        </div>
+        <hr>
+
+        <div class="mb-4">
+          <span>Total</span>
+          <span class="is-pulled-right">$150.00</span>
+        </div>
+
+        <button class="button is-link is-light is-rounded is-fullwidth">Pay</button>
+
+        <div class="control">
+          <button class="button is-small is-link is-light" type="button" onclick="prevStep()">Previous</button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
-<a href="/">Home Page</a>
 @end
+
+<script>
+  let currentStep = 1;
+  const form = document.getElementById('multiStepForm');
+  const steps = document.querySelectorAll('.step');
+  function showStep(step) {
+    steps.forEach((s, index) => {
+      s.classList.toggle('active', index + 1 === step);
+    });
+  }
+  function nextStep() {
+    if (currentStep < steps.length) {
+      currentStep++;
+      showStep(currentStep);
+    }
+
+  }
+  function prevStep() {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  }
+  showStep(currentStep);
+
+
+  document.getElementById('file-input').addEventListener('change', function () {
+    var fileName = this.files[0].name;
+    document.getElementById('file-name').textContent = fileName;
+  });
+</script>
