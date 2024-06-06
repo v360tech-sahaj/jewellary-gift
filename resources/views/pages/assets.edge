@@ -13,20 +13,80 @@
   }
 </style>
 @component('layouts/main')
+{{-- <div class="grid has-text-centered mt-5 mb-2">
+  <div class="cell mb-4">
+    @component('components/imageRadio', {
+    img: '/images/template-7.jpg',
+    video: '/videos/test.mp4',
+    id: 'template1',
+    placeholder: 'Template 1',
+    labelFor: 'template_1'
+    })
+    @end
+  </div>
+  <div class="cell mb-4">
+    @component('components/imageRadio', {
+    img: '/images/template-3.jpg',
+    video: '/videos/test.mp4',
+    id: 'template2',
+    placeholder: 'Template 2',
+    labelFor: 'template_2'
+    })
+    @end
+  </div>
+  <div class="cell mb-4">
+    @component('components/imageRadio', {
+    img: '/images/template-4.jpg',
+    id: 'template3',
+    placeholder: 'Template 3',
+    labelFor: 'template_3'
+    })
+    @end
+  </div>
+  <div class="cell mb-4">
+    @component('components/imageRadio', {
+    img: '/images/template-8.jpg',
+    id: 'template4',
+    placeholder: 'Template 4',
+    labelFor: 'template_4'
+    })
+    @end
+  </div>
+  <div class="cell mb-4">
+    @component('components/imageRadio', {
+    img: '/images/template-10.jpg',
+    id: 'template5',
+    placeholder: 'Template 5',
+    labelFor: 'template_5'
+    })
+    @end
+  </div>
+</div> --}}
+
 <div class="container">
   <a href="/">Home Page</a>
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
   <form action="#" id="multiStepForm">
     {{-- Step 1 --}}
     <div class="step active" id="step1">
-      <section class="hero is-small is-primary mb-2 p-0">
+      <section class="hero is-small is-dark mb-2">
         <div class="hero-body">
           <p class="title is-size-5">Step 1</p>
           <p class="subtitle is-size-6">Add Assets</p>
         </div>
       </section>
       <div class="box">
-        <div class="has-text-centered">QR scanner</div>
+        <div class="file is-centered is-dark mb-0">
+          <label class="file-label mb-0 py-0">
+            <input class="file-input" type="file" accept="image/*" capture="environment">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-qrcode"></i>
+              </span>
+              <span class="file-label">Scan Qr</span>
+            </span>
+          </label>
+        </div>
         <div class="divider my-2">OR</div>
         <div class="control has-icons-left mb-2">
           <input class="input" type="number" placeholder="Enter asset number">
@@ -35,45 +95,73 @@
           </span>
         </div>
         <div class="control">
-          <button class="button is-small is-link" type="button" onclick="nextStep()">Next</button>
+          <button class="button is-small is-dark" type="button" onclick="nextStep()">Next</button>
         </div>
       </div>
     </div>
 
     {{-- Step 2 --}}
     <div class="step" id="step2">
-      <section class="hero is-small is-primary mb-2 p-0">
+      <section class="hero is-small is-dark mb-2 ">
         <div class="hero-body">
           <p class="title is-size-5">Step 2</p>
           <p class="subtitle is-size-6">Select templates</p>
         </div>
       </section>
       <div class="box">
-        <div class="fixed-grid has-5-cols-desktop mb-2">
-          <div class="grid has-text-centered">
-            <div class="cell">
-              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-            </div>
-            <div class="cell">
-              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-            </div>
-            <div class="cell">
-              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-            </div>
-            <div class="cell">
-              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-            </div>
-            <div class="cell">
-              <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-            </div>
+        <div class="grid has-text-centered mt-5 mb-2">
+          <div class="cell mb-4">
+            @component('components/imageRadio', {
+            img: '/images/template-7.jpg',
+            id: 'template1',
+            placeholder: 'Template 1',
+            labelFor: 'template_1'
+            })
+            @end
+          </div>
+          <div class="cell mb-4">
+            @component('components/imageRadio', {
+            img: '/images/template-3.jpg',
+            id: 'template2',
+            placeholder: 'Template 2',
+            labelFor: 'template_2'
+            })
+            @end
+          </div>
+          <div class="cell mb-4">
+            @component('components/imageRadio', {
+            img: '/images/template-4.jpg',
+            id: 'template3',
+            placeholder: 'Template 3',
+            labelFor: 'template_3'
+            })
+            @end
+          </div>
+          <div class="cell mb-4">
+            @component('components/imageRadio', {
+            img: '/images/template-8.jpg',
+            id: 'template4',
+            placeholder: 'Template 4',
+            labelFor: 'template_4'
+            })
+            @end
+          </div>
+          <div class="cell mb-4">
+            @component('components/imageRadio', {
+            img: '/images/template-10.jpg',
+            id: 'template5',
+            placeholder: 'Template 5',
+            labelFor: 'template_5'
+            })
+            @end
           </div>
         </div>
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-small is-link is-light" type="button" onclick="prevStep()">Previous</button>
+            <button class="button is-small is-light" type="button" onclick="prevStep()">Previous</button>
           </div>
           <div class="control">
-            <button class="button is-small is-link" type="button" onclick="nextStep()">Next</button>
+            <button class="button is-small is-dark" type="button" onclick="nextStep()">Next</button>
           </div>
         </div>
       </div>
@@ -81,43 +169,50 @@
 
     {{-- Step 3 --}}
     <div class="step" id="step3">
-      <section class="hero is-small is-primary mb-2 p-0">
+      <section class="hero is-small is-dark mb-2">
         <div class="hero-body">
           <p class="title is-size-5">Step 3</p>
           <p class="subtitle is-size-6">Enter template details</p>
         </div>
       </section>
       <div class="box">
-        <div class="mb-2">
-          <div class="file has-name is-centered is-boxed is-small mb-0">
-            <label class="file-label">
-              <input class="file-input" type="file" id="file-input" />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label"> Choose a file… </span>
+        <div class="file has-name is-centered is-boxed is-small mb-0">
+          <label class="file-label mb-0 py-0">
+            <input class="file-input" type="file" id="file-input" />
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
               </span>
-              <span class="file-name has-text-centered" id="file-name"> No file selected </span>
-            </label>
-          </div>
-          <div class="divider my-2">OR</div>
-          <div class="control has-icons-left mb-2">
-            <input class="input" type="text" placeholder="Any Special Message">
-            <span class="icon is-small is-left">
-              <i class="fas fa-envelope"></i>
+              <span class="file-label"> Choose a file… </span>
             </span>
-          </div>
-          <div class="divider my-2">OR</div>
-          <p class="has-text-centered">Capture a video message</p>
+            <span class="file-name has-text-centered" id="file-name"> No file selected </span>
+          </label>
         </div>
-
+        <div class="divider my-2">OR</div>
+        <div class="control has-icons-left mb-2">
+          <input class="input" type="text" placeholder="Any Special Message">
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+        </div>
+        <div class="divider my-2">OR</div>
+        <div class="file is-centered is-dark mb-2">
+          <label class="file-label py-0 mb-0">
+            <input class="file-input" type="file" accept="video/*" capture="environment">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-video"></i>
+              </span>
+              <span class="file-label">Capture a video message</span>
+            </span>
+          </label>
+        </div>
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-small is-link is-light" type="button" onclick="prevStep()">Previous</button>
+            <button class="button is-small is-light" type="button" onclick="prevStep()">Previous</button>
           </div>
           <div class="control">
-            <button class="button is-small is-link" type="button" onclick="nextStep()">Next</button>
+            <button class="button is-small is-dark" type="button" onclick="nextStep()">Next</button>
           </div>
         </div>
       </div>
@@ -125,7 +220,7 @@
 
     {{-- Summary --}}
     <div class="step" id="summary">
-      <section class="hero is-small is-primary mb-2 p-0">
+      <section class="hero is-small is-dark mb-2">
         <div class="hero-body">
           <p class="title is-size-5">Step 4</p>
           <p class="subtitle is-size-6">Checkout</p>
@@ -169,11 +264,9 @@
           <span>Total</span>
           <span class="is-pulled-right">$150.00</span>
         </div>
-
-        <button class="button is-link is-light is-rounded is-fullwidth">Pay</button>
-
+        <a class="button is-dark is-rounded is-fullwidth" href="/">Pay</a>
         <div class="control">
-          <button class="button is-small is-link is-light" type="button" onclick="prevStep()">Previous</button>
+          <button class="button is-small is-light" type="button" onclick="prevStep()">Previous</button>
         </div>
       </div>
     </div>

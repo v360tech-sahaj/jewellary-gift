@@ -1,0 +1,115 @@
+<div class="card mb-0">
+  <div class="card-image">
+    <figure class="image is-4by3">
+      <img src="{{ img }}" alt="{{ placeholder }}" />
+    </figure>
+  </div>
+  <div class="card-content p-1">
+    <div class="content js-modal-trigger has-text-centered" data-target="{{ id }}">View</div>
+  </div>
+</div>
+
+{{-- <div id="{{ id }}" class="modal px-3">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <p class="image is-4by3">
+      <img src={{ img }} alt="{{ placeholder }}">
+    </p>
+  </div>
+</div> --}}
+<div id="{{ id }}" class="modal px-3">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box" style="width: 100%; height: 80vh;">
+      <video id="video-{{ id }}" controls style="width: 100%; height: 100%;">
+        <source src="{{ video }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+
+{{--
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    function openModal($el) {
+      $el.classList.add('is-active')
+    }
+
+    function closeModal($el) {
+      $el.classList.remove('is-active')
+    }
+
+    ; (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+      const modal = $trigger.dataset.target
+      const $target = document.getElementById(modal)
+
+      $trigger.addEventListener('click', () => {
+        openModal($target)
+      })
+    })
+      ; (
+        document.querySelectorAll(
+          '.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot, .confirm-cancel'
+        ) || []
+      ).forEach(($close) => {
+        const $target = $close.closest('.modal')
+
+        $close.addEventListener('click', () => {
+          closeModal($target)
+        })
+      })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeAllModals()
+      }
+    })
+  })
+</script> --}}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    function openModal($el) {
+      $el.classList.add('is-active')
+    }
+
+    function closeModal($el) {
+      $el.classList.remove('is-active')
+    }
+
+    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+      const modal = $trigger.dataset.target;
+      const $target = document.getElementById(modal);
+
+      $trigger.addEventListener('click', () => {
+        openModal($target);
+        const video = document.getElementById(`video-${modal}`);
+        video.play();
+      });
+    });
+
+    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+      const $target = $close.closest('.modal');
+
+      $close.addEventListener('click', () => {
+        closeModal($target);
+        const video = $target.querySelector('video');
+        video.pause();
+        video.currentTime = 0;
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+          closeModal($modal);
+          const video = $modal.querySelector('video');
+          video.pause();
+          video.currentTime = 0;
+        });
+      }
+    });
+  });
+</script>

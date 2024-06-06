@@ -1,0 +1,50 @@
+<style>
+  input[type="radio"] {
+    display: none;
+
+    &:not(:disabled)~label {
+      cursor: pointer;
+    }
+  }
+
+  label {
+    height: 100%;
+    display: block;
+    background: white;
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    position: relative;
+  }
+
+  input[type="radio"]:checked+label {
+    &::after {
+      color: black;
+      font-family: FontAwesome;
+      border: 2px solid black;
+      content: "\f00c";
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 50px;
+      width: 50px;
+      line-height: 50px;
+      border-radius: 50%;
+      background: #cccccc;
+    }
+  }
+</style>
+
+<input type="radio" id="{{ labelFor }}" name="select" value="2">
+<label for="{{ labelFor }}" class="mb-0 p-0">
+  @component('components/modal', {
+  name: 'View',
+  img: img,
+  video: video,
+  id: id,
+  placeholder: placeholder,
+  })
+  @end
+</label>
