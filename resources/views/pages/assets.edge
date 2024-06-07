@@ -13,58 +13,7 @@
   }
 </style>
 @component('layouts/main')
-{{-- <div class="grid has-text-centered mt-5 mb-2">
-  <div class="cell mb-4">
-    @component('components/imageRadio', {
-    img: '/images/template-7.jpg',
-    video: '/videos/test.mp4',
-    id: 'template1',
-    placeholder: 'Template 1',
-    labelFor: 'template_1'
-    })
-    @end
-  </div>
-  <div class="cell mb-4">
-    @component('components/imageRadio', {
-    img: '/images/template-3.jpg',
-    video: '/videos/test.mp4',
-    id: 'template2',
-    placeholder: 'Template 2',
-    labelFor: 'template_2'
-    })
-    @end
-  </div>
-  <div class="cell mb-4">
-    @component('components/imageRadio', {
-    img: '/images/template-4.jpg',
-    id: 'template3',
-    placeholder: 'Template 3',
-    labelFor: 'template_3'
-    })
-    @end
-  </div>
-  <div class="cell mb-4">
-    @component('components/imageRadio', {
-    img: '/images/template-8.jpg',
-    id: 'template4',
-    placeholder: 'Template 4',
-    labelFor: 'template_4'
-    })
-    @end
-  </div>
-  <div class="cell mb-4">
-    @component('components/imageRadio', {
-    img: '/images/template-10.jpg',
-    id: 'template5',
-    placeholder: 'Template 5',
-    labelFor: 'template_5'
-    })
-    @end
-  </div>
-</div> --}}
-
 <div class="container">
-  <a href="/">Home Page</a>
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
   <form action="#" id="multiStepForm">
     {{-- Step 1 --}}
@@ -109,49 +58,59 @@
         </div>
       </section>
       <div class="box">
-        <div class="grid has-text-centered mt-5 mb-2">
-          <div class="cell mb-4">
+        <div class="grid has-text-centered mb-0">
+          <div class="cell mb-3">
             @component('components/imageRadio', {
             img: '/images/template-7.jpg',
+            video: '/videos/test.mp4',
             id: 'template1',
             placeholder: 'Template 1',
-            labelFor: 'template_1'
+            labelFor: 'template_1',
+            value: 'Template 1'
             })
             @end
           </div>
-          <div class="cell mb-4">
+          <div class="cell mb-3">
             @component('components/imageRadio', {
             img: '/images/template-3.jpg',
+            video: '/videos/test1.mp4',
             id: 'template2',
             placeholder: 'Template 2',
-            labelFor: 'template_2'
+            labelFor: 'template_2',
+            value: 'Template 2'
             })
             @end
           </div>
-          <div class="cell mb-4">
+          <div class="cell mb-3">
             @component('components/imageRadio', {
             img: '/images/template-4.jpg',
+            video: '/videos/test.mp4',
             id: 'template3',
             placeholder: 'Template 3',
-            labelFor: 'template_3'
+            labelFor: 'template_3',
+            value: 'Template 3'
             })
             @end
           </div>
-          <div class="cell mb-4">
+          <div class="cell mb-3">
             @component('components/imageRadio', {
             img: '/images/template-8.jpg',
+            video: '/videos/test1.mp4',
             id: 'template4',
             placeholder: 'Template 4',
-            labelFor: 'template_4'
+            labelFor: 'template_4',
+            value: 'Template 4'
             })
             @end
           </div>
-          <div class="cell mb-4">
+          <div class="cell mb-3">
             @component('components/imageRadio', {
             img: '/images/template-10.jpg',
+            video: '/videos/test.mp4',
             id: 'template5',
             placeholder: 'Template 5',
-            labelFor: 'template_5'
+            labelFor: 'template_5',
+            value: 'Template 5'
             })
             @end
           </div>
@@ -227,7 +186,6 @@
         </div>
       </section>
       <div class="box">
-
         <div class="media">
           <div class="media-left">
             <figure class="image is-48x48">
@@ -244,9 +202,9 @@
         </div>
         <div class="columns pr-5 is-mobile">
           <div class="column is-fullwidth is-four-fifths pr-0">
-            <input class="input" type="number" placeholder="Enter promo code">
+            <input class="input" type="text" placeholder="Enter promo code">
           </div>
-          <div class="column"><button class="button is-fullwidth">Apply</button></div>
+          <div class="column"><a href="#" class="button is-fullwidth">Apply</a></div>
         </div>
 
         <div>
@@ -265,9 +223,6 @@
           <span class="is-pulled-right">$150.00</span>
         </div>
         <a class="button is-dark is-rounded is-fullwidth" href="/">Pay</a>
-        <div class="control">
-          <button class="button is-small is-light" type="button" onclick="prevStep()">Previous</button>
-        </div>
       </div>
     </div>
   </form>
@@ -297,7 +252,6 @@
     }
   }
   showStep(currentStep);
-
 
   document.getElementById('file-input').addEventListener('change', function () {
     var fileName = this.files[0].name;

@@ -25,22 +25,21 @@
       border: 2px solid black;
       content: "\f00c";
       position: absolute;
-      top: -25px;
+      top: -10px;
       left: 50%;
       transform: translateX(-50%);
-      height: 50px;
-      width: 50px;
-      line-height: 50px;
+      height: 30px;
+      width: 30px;
+      line-height: 28px;
       border-radius: 50%;
       background: #cccccc;
     }
   }
 </style>
 
-<input type="radio" id="{{ labelFor }}" name="select" value="2">
-<label for="{{ labelFor }}" class="mb-0 p-0">
+<input type="radio" id="{{ labelFor }}" name="template" value="{{ value }}">
+<label for="{{ labelFor }}" class="mb-0 p-1">
   @component('components/modal', {
-  name: 'View',
   img: img,
   video: video,
   id: id,
