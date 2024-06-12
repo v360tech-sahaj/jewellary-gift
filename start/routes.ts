@@ -9,5 +9,8 @@ router.group(() => {
 
   router.on('/login').render('pages/login')
 
-  router.on('/assets').render('pages/assets')
+  router.on('/add-assets').render('pages/addAssets')
+  router.on('/templates').render('pages/templates')
+  router.on('/template-details').render('pages/templateDetails')
+  router.on('/summary').render('pages/summary')
 })

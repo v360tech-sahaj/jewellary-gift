@@ -1,0 +1,54 @@
+@component('layouts/main')
+<div class="container">
+  <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
+  <form action="{{ route('/summary') }}">
+    <section class="hero is-small is-dark mb-2">
+      <div class="hero-body">
+        <p class="title is-size-5">Step 3</p>
+        <p class="subtitle is-size-6">Enter template details</p>
+      </div>
+    </section>
+    <div class="box">
+      <div class="file has-name is-centered is-boxed is-small mb-0">
+        <label class="file-label mb-0 py-0">
+          <input class="file-input" type="file" id="file-input" />
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-upload"></i>
+            </span>
+            <span class="file-label"> Choose a file… </span>
+          </span>
+          <span class="file-name has-text-centered" id="file-name"> No file selected </span>
+        </label>
+      </div>
+      <div class="divider my-2">OR</div>
+      <div class="control has-icons-left mb-2">
+        <input class="input" type="text" placeholder="Any Special Message">
+        <span class="icon is-small is-left">
+          <i class="fas fa-envelope"></i>
+        </span>
+      </div>
+      <div class="divider my-2">OR</div>
+      <div class="file is-centered is-dark mb-2">
+        <label class="file-label py-0 mb-0">
+          <input class="file-input" type="file" accept="video/*" capture="environment">
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-video"></i>
+            </span>
+            <span class="file-label">Capture a video message</span>
+          </span>
+        </label>
+      </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <a href="{{ route('/templates')}}" class="button is-small is-light" type="button">Previous</a>
+        </div>
+        <div class="control">
+          <button class="button is-small is-dark" type="submit">Next</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+@end

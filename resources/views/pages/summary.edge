@@ -1,0 +1,53 @@
+@component('layouts/main')
+<div class="container">
+  <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
+  <form action="#">
+    <section class="hero is-small is-dark mb-2">
+      <div class="hero-body">
+        <p class="title is-size-5">Step 4</p>
+        <p class="subtitle is-size-6">Checkout</p>
+      </div>
+    </section>
+    <div class="box">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4">template name</p>
+          <p class="subtitle is-6">template detail</p>
+        </div>
+        <div>
+          <p>$200.00</p>
+        </div>
+      </div>
+      <div class="columns is-mobile">
+        <div class="column pr-0">
+          <input class="input" type="text" placeholder="Enter promo code">
+        </div>
+        <div class="column is-one-quarter"><a href="#" class="button is-fullwidth">Apply</a></div>
+      </div>
+
+      <div>
+        <span>Subtotal</span>
+        <span class="is-pulled-right">$200.00</span>
+      </div>
+
+      <div>
+        <span>Discount</span>
+        <span class="is-pulled-right">$50.00</span>
+      </div>
+      <hr>
+
+      <div class="mb-4">
+        <span>Total</span>
+        <span class="is-pulled-right">$150.00</span>
+      </div>
+      <a class="button is-dark is-rounded is-fullwidth mb-1" href="{{ route('/') }}">Pay</a>
+      <a class="button is-warning is-light is-rounded is-fullwidth" href="{{ route('/template-details') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+@end

@@ -1,12 +1,14 @@
 @component('layouts/main')
-<section class="hero is-small is-dark">
-  <div class="hero-body">
-    <p class="title">Home</p>
-    <p class="subtitle">Welcome to Gifting Studio</p>
-  </div>
-</section>
+<div class="container">
+  <section class="hero is-small is-dark">
+    <div class="hero-body">
+      <p class="title">Home</p>
+      <p class="subtitle">Welcome to Gifting Studio</p>
+    </div>
+  </section>
 
-{{-- Navigation purpose only --}}
-<a href="/assets" class="button is-dark mt-1">Request for Gift</a><br>
-<a href="/login" class="button mt-1">Login Page</a><br>
+  {{-- Navigation purpose only --}}
+  <a href="{{ route('/add-assets') }}" class="button is-dark mt-1">Request for Gift</a><br>
+  <a href="{{ route('/login') }}" class="button mt-1">Login Page</a><br>
+</div>
 @end

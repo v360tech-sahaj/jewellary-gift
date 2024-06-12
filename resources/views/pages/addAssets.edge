@@ -1,0 +1,63 @@
+@component('layouts/main')
+<div class="container">
+  <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
+  <form action="{{ route('/templates') }}">
+    <section class="hero is-small is-dark mb-2">
+      <div class="hero-body">
+        <p class="title is-size-5">Step 1</p>
+        <p class="subtitle is-size-6">Add Assets</p>
+      </div>
+    </section>
+    <div class="box">
+      <div id="asset-container">
+        @component('components/addAsset', { })
+        @end
+      </div>
+      <div class="level is-mobile">
+        <div class="level-left control">
+          <button class="button is-small is-dark" type="submit">Next</button>
+        </div>
+        <div class="level-right">
+          <div class="control is-pulled-right">
+            <button class="button is-small is-dark is-outlined" type="button" onclick="addAssetBox()">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+            <button class="button deleteAsset is-small is-danger is-outlined" type="button"
+              onclick="removeLastAssetBox()">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+@end
+
+<script>
+  function addAssetBox() {
+    const assetContainer = document.getElementById('asset-container');
+    const assetBoxes = assetContainer.getElementsByClassName('asset-box');
+    if (assetBoxes.length < 5) {
+      const newAssetBox = `
+        <div id="asset-container">
+          @include('components/addAsset')
+        </div>
+      `;
+      assetContainer.insertAdjacentHTML('beforeend', newAssetBox);
+    } else {
+      alert("You can add a maximum of 5 assets.");
+    }
+  }
+
+  function removeLastAssetBox() {
+    const assetContainer = document.getElementById('asset-container');
+    const assetBoxes = assetContainer.getElementsByClassName('asset-box');
+    const deleteAsset = document.getElementById('deleteAsset');
+    if (assetBoxes.length > 1) {
+      assetBoxes[assetBoxes.length - 1].remove();
+    } else {
+      alert("You need to have at least one asset box.");
+    }
+  }
+</script>

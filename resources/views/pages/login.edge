@@ -1,60 +1,62 @@
 @component('layouts/main')
-<form action="">
-  <section class="is-relative section has-background-light">
-    <div class="columns is-vcentered">
-      <div class="column is-6 mb-8">
-        <div class="title is-2 mb-0">Welcome!</div>
-        <p class="is-size-5 has-text-grey-dark">Jewellery Gifting</p>
-      </div>
-      <div class="column is-5">
-        <div class="box has-background-white has-text-centered">
-          <form action="#">
-            <h3 class="title is-4 mt-4 mb-3">Sign In</h3>
-            <div class="mb-2">
-              <div class="control has-icons-left mb-1">
-                <input class="input" type="email" placeholder="anything@email.com" required>
-                <span class="icon is-small is-left">
-                  <i class="fa fa-envelope"></i>
-                </span>
-              </div>
-              <div class="control has-icons-left">
-                <input type="password" placeholder="Password" class="input" required>
-                <span class="icon is-small is-left">
-                  <i class="fa fa-lock"></i>
-                </span>
-              </div>
-            </div>
-
-            <a href="/" class="button is-dark is-fullwidth">Login</a>
-            <small><a href="#">Forgot password</a></small>
-
-            <div class="divider my-2">OR</div>
-
-            <div class="field">
-              <div class="control">
-                <a class="button is-link is-light is-fullwidth mb-2" href="{{ route('/google/sign-in') }}">
-                  <span class="icon">
-                    <i class="fa-brands fa-google"></i>
+<div class="container">
+  <form action="">
+    <section class="is-relative section has-background-light">
+      <div class="columns is-vcentered">
+        <div class="column is-6 mb-8">
+          <div class="title is-2 mb-0">Welcome!</div>
+          <p class="is-size-5 has-text-grey-dark">Jewellery Gifting</p>
+        </div>
+        <div class="column is-5">
+          <div class="box has-background-white has-text-centered">
+            <form action="#">
+              <h3 class="title is-4 mt-4 mb-3">Sign In</h3>
+              <div class="mb-2">
+                <div class="control has-icons-left mb-1">
+                  <input class="input" type="email" placeholder="anything@email.com" required>
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-envelope"></i>
                   </span>
-                  <span>Sign in with Google</span>
-                </a>
-              </div>
-              <div class="control">
-                <a class="button is-info is-fullwidth mb-2" href="#">
-                  <span class="icon">
-                    <i class="fa-brands fa-twitter"></i>
+                </div>
+                <div class="control has-icons-left">
+                  <input type="password" placeholder="Password" class="input" required>
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-lock"></i>
                   </span>
-                  <span>Sign in with Twitter</span>
-                </a>
+                </div>
               </div>
-              <div class="control">
-                <small><a href="/">No Login</a></small>
+
+              <a href="{{ route('/') }}" class="button is-dark is-fullwidth">Login</a>
+              <small><a href="#">Forgot password</a></small>
+
+              <div class="divider my-2">OR</div>
+
+              <div class="field">
+                <div class="control">
+                  <a class="button is-link is-light is-fullwidth mb-2" href="{{ route('/google/sign-in') }}">
+                    <span class="icon">
+                      <i class="fa-brands fa-google"></i>
+                    </span>
+                    <span>Sign in with Google</span>
+                  </a>
+                </div>
+                <div class="control">
+                  <a class="button is-info is-fullwidth mb-2" href="#">
+                    <span class="icon">
+                      <i class="fa-brands fa-twitter"></i>
+                    </span>
+                    <span>Sign in with Twitter</span>
+                  </a>
+                </div>
+                <div class="control">
+                  <small><a href="{{ route('/') }}">No Login</a></small>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-</form>
+    </section>
+  </form>
+</div>
 @end
