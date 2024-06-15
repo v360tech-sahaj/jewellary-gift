@@ -1,6 +1,7 @@
 @component('layouts/main')
 <div class="container">
-  <form action="">
+  <form action="{{ route('home') }}">
+    {{ csrfField() }}
     <section class="is-relative section has-background-light">
       <div class="columns is-vcentered">
         <div class="column is-6 mb-8">
@@ -26,7 +27,7 @@
                 </div>
               </div>
 
-              <a href="{{ route('/') }}" class="button is-dark is-fullwidth">Login</a>
+              <button type="submit" class="button is-dark is-fullwidth">Login</button>
               <small><a href="#">Forgot password</a></small>
 
               <div class="divider my-2">OR</div>
@@ -49,7 +50,7 @@
                   </a>
                 </div>
                 <div class="control">
-                  <small><a href="{{ route('/') }}">No Login</a></small>
+                  <small><a href="{{ route('home') }}">No Login</a></small>
                 </div>
               </div>
             </form>

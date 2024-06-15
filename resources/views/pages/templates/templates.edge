@@ -1,7 +1,8 @@
 @component('layouts/main')
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
-  <form action="{{ route('/template-details') }}">
+  <form method="post" action="{{ route('templates.store') }}">
+    {{ csrfField() }}
     <section class="hero is-small is-dark mb-2 ">
       <div class="hero-body">
         <p class="title is-size-5">Step 2</p>
@@ -17,7 +18,8 @@
           id: 'template1',
           placeholder: 'Template 1',
           labelFor: 'template_1',
-          value: 'Template 1'
+          value: 'Template 1',
+          template: template
           })
           @end
         </div>
@@ -28,7 +30,8 @@
           id: 'template2',
           placeholder: 'Template 2',
           labelFor: 'template_2',
-          value: 'Template 2'
+          value: 'Template 2',
+          template: template
           })
           @end
         </div>
@@ -39,7 +42,8 @@
           id: 'template3',
           placeholder: 'Template 3',
           labelFor: 'template_3',
-          value: 'Template 3'
+          value: 'Template 3',
+          template: template
           })
           @end
         </div>
@@ -50,7 +54,8 @@
           id: 'template4',
           placeholder: 'Template 4',
           labelFor: 'template_4',
-          value: 'Template 4'
+          value: 'Template 4',
+          template: template
           })
           @end
         </div>
@@ -61,14 +66,15 @@
           id: 'template5',
           placeholder: 'Template 5',
           labelFor: 'template_5',
-          value: 'Template 5'
+          value: 'Template 5',
+          template: template
           })
           @end
         </div>
       </div>
       <div class="field is-grouped">
         <div class="control">
-          <a href="{{ route('/add-assets') }}" class="button is-small is-light" type="button">Previous</a>
+          <a href="{{ route('assets.index') }}" class="button is-small is-light" type="button">Previous</a>
         </div>
         <div class="control">
           <button class="button is-small is-dark" type="submit">Next</button>

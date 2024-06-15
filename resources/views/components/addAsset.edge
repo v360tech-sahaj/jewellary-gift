@@ -12,7 +12,8 @@
   </div>
   <div class="divider my-2">OR</div>
   <div class="control has-icons-left mb-2">
-    <input class="input" type="number" placeholder="Enter asset number" required>
+    <input class="input" type="number" name="assetNumber" placeholder="Enter asset number" value="{{ value || ''}}"
+      required>
     <span class="icon is-small is-left">
       <i class="fas fa-pen"></i>
     </span>

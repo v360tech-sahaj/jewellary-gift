@@ -1,7 +1,8 @@
 @component('layouts/main')
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
-  <form action="#">
+  <form method="post" action="{{ route('checkout.store') }}">
+    {{ csrfField() }}
     <section class="hero is-small is-dark mb-2">
       <div class="hero-body">
         <p class="title is-size-5">Step 4</p>
@@ -16,7 +17,7 @@
           </figure>
         </div>
         <div class="media-content">
-          <p class="title is-4">template name</p>
+          <p class="title is-4">{{ template }}</p>
           <p class="subtitle is-6">template detail</p>
         </div>
         <div>
@@ -45,8 +46,9 @@
         <span>Total</span>
         <span class="is-pulled-right">$150.00</span>
       </div>
-      <a class="button is-dark is-rounded is-fullwidth mb-1" href="{{ route('/') }}">Pay</a>
-      <a class="button is-warning is-light is-rounded is-fullwidth" href="{{ route('/template-details') }}">Cancel</a>
+      <button class="button is-dark is-rounded is-fullwidth mb-1" type="submit">Pay</button>
+      <a class="button is-warning is-light is-rounded is-fullwidth"
+        href="{{ route('templates_details.index') }}">Cancel</a>
     </div>
   </form>
 </div>

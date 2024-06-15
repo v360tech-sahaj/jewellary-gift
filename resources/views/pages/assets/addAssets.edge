@@ -1,7 +1,8 @@
 @component('layouts/main')
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
-  <form action="{{ route('/templates') }}">
+  <form method="post" action="{{ route('assets.store') }}">
+    {{ csrfField() }}
     <section class="hero is-small is-dark mb-2">
       <div class="hero-body">
         <p class="title is-size-5">Step 1</p>
@@ -10,22 +11,23 @@
     </section>
     <div class="box">
       <div id="asset-container">
-        @component('components/addAsset', { })
+        @component('components/addAsset', {
+        value: assetNumber || ''
+        })
         @end
       </div>
       <div class="level is-mobile">
         <div class="level-left control">
-          <button class="button is-small is-dark" type="submit">Next</button>
+          <button type="submit" class="button is-small is-dark">Next</button>
         </div>
         <div class="level-right">
           <div class="control is-pulled-right">
-            <button class="button is-small is-dark is-outlined" type="button" onclick="addAssetBox()">
+            <a class="button is-small is-dark is-outlined" type="button" onclick="addAssetBox()">
               <i class="fa-solid fa-plus"></i>
-            </button>
-            <button class="button deleteAsset is-small is-danger is-outlined" type="button"
-              onclick="removeLastAssetBox()">
+            </a>
+            <a class="button deleteAsset is-small is-danger is-outlined" type="button" onclick="removeLastAssetBox()">
               <i class="fa-solid fa-trash-can"></i>
-            </button>
+            </a>
           </div>
         </div>
       </div>
