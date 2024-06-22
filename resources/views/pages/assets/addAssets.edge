@@ -1,7 +1,7 @@
 @component('layouts/main')
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
-  <form method="post" action="{{ route('assets.store') }}">
+  <form method="post" action="{{ route('assets.store', { giftSession : giftSession.sessionId }) }}">
     {{ csrfField() }}
     <section class="hero is-small is-dark mb-2">
       <div class="hero-body">
@@ -12,7 +12,7 @@
     <div class="box">
       <div id="asset-container">
         @component('components/addAsset', {
-        value: assetNumber || ''
+        value: giftSession.assetNumber || ''
         })
         @end
       </div>
