@@ -12,6 +12,6 @@ export default class CheckoutsController {
     console.log('Gift Session :', giftSession)
 
     session.clear()
-    return response.redirect().toRoute('home', { giftSession })
+    return response.redirect().toRoute('home')
   }
 }

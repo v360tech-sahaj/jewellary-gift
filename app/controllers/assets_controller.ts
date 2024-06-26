@@ -4,16 +4,13 @@ import { randomUUID } from 'crypto'
 export default class AssetsController {
   public async index({ view, session }: HttpContext) {
     const sessionId = randomUUID()
-    // const assetNumber = session.get('assetNumber')
-    let giftSession = session.get('giftSession')
+    let giftSession = session.get('giftSession') || { sessionId, assetNumber: null }
     const assetNumber = giftSession.assetNumber
 
-    // let giftSession = { sessionId, assetNumber }
     giftSession.sessionId = sessionId
     giftSession.assetNumber = assetNumber
     session.put('giftSession', giftSession)
 
-    console.log(giftSession)
     return view.render('pages/assets/addAssets', { giftSession })
   }
 
@@ -25,6 +22,6 @@ export default class AssetsController {
     giftSession.assetNumber = assetNumber
     session.put('giftSession', giftSession)
 
-    // return response.redirect().toRoute('templates.index', { giftSession })
+    return response.redirect().toRoute('templates.index', { giftSession })
   }
 }
