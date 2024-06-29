@@ -10,24 +10,36 @@
       </div>
     </section>
     <div class="box">
+      @if(giftSession.assetNumber)
+      <div id="asset-container">
+        @each(number in giftSession.assetNumber)
+        @component('components/addAsset', {
+        value: number || ''
+        })
+        @end
+        @end
+      </div>
+      @else
       <div id="asset-container">
         @component('components/addAsset', {
-        value: giftSession.assetNumber || ''
         })
         @end
       </div>
+      @end
+
       <div class="level is-mobile">
-        <div class="level-left control">
-          <button class="button is-small is-danger is-light" type="button" onclick="history.back()">Cancel</button>
-          <button type="submit" class="button is-small is-dark">Next</button>
+        <div class="level-left">
+          <div class="control">
+            <a href="{{ route('home') }}" class="button is-danger is-small is-light" type="button">Cancel</a>
+            {{-- <button class="button is-small is-danger is-light" type="button"
+              onclick="history.back()">Cancel</button> --}}
+            <button type="submit" class="button is-small is-dark">Next</button>
+          </div>
         </div>
         <div class="level-right">
           <div class="control is-pulled-right">
             <a class="button is-small is-dark is-outlined" type="button" onclick="addAssetBox()">
               <i class="fa-solid fa-plus"></i>
-            </a>
-            <a class="button deleteAsset is-small is-danger is-outlined" type="button" onclick="removeLastAssetBox()">
-              <i class="fa-solid fa-trash-can"></i>
             </a>
           </div>
         </div>
@@ -43,9 +55,7 @@
     const assetBoxes = assetContainer.getElementsByClassName('asset-box');
     if (assetBoxes.length < 5) {
       const newAssetBox = `
-        <div id="asset-container">
           @include('components/addAsset')
-        </div>
       `;
       assetContainer.insertAdjacentHTML('beforeend', newAssetBox);
     } else {
@@ -53,12 +63,11 @@
     }
   }
 
-  function removeLastAssetBox() {
-    const assetContainer = document.getElementById('asset-container');
-    const assetBoxes = assetContainer.getElementsByClassName('asset-box');
-    const deleteAsset = document.getElementById('deleteAsset');
+  function removeAssetBox(deleteButton) {
+    const assetBoxes = document.getElementsByClassName('asset-box');
     if (assetBoxes.length > 1) {
-      assetBoxes[assetBoxes.length - 1].remove();
+      const assetBox = deleteButton.closest('.asset-box');
+      assetBox.remove();
     } else {
       alert("You need to have at least one asset box.");
     }
