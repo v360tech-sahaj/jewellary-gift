@@ -1,7 +1,7 @@
 @component('layouts/main')
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
-  <form method="post" action="{{ route('assets.store', { giftSession : giftSession.sessionId }) }}">
+  <form method="post" action="{{ route('assets.store', { gsId }) }}">
     {{ csrfField() }}
     <section class="hero is-small is-dark mb-2">
       <div class="hero-body">
@@ -10,29 +10,22 @@
       </div>
     </section>
     <div class="box">
-      @if(giftSession.assetNumber)
       <div id="asset-container">
-        @each(number in giftSession.assetNumber)
-        @component('components/addAsset', {
-        value: number || ''
-        })
+        @if(assetNumbers && assetNumbers.length > 0)
+        @each(assetNumber in assetNumbers)
+        @component('pages/assets/asset', {value: assetNumber})
+        @end
+        @end
+        @else
+        @component('pages/assets/asset')
         @end
         @end
       </div>
-      @else
-      <div id="asset-container">
-        @component('components/addAsset', {
-        })
-        @end
-      </div>
-      @end
 
       <div class="level is-mobile">
         <div class="level-left">
           <div class="control">
             <a href="{{ route('home') }}" class="button is-danger is-small is-light" type="button">Cancel</a>
-            {{-- <button class="button is-small is-danger is-light" type="button"
-              onclick="history.back()">Cancel</button> --}}
             <button type="submit" class="button is-small is-dark">Next</button>
           </div>
         </div>
@@ -55,7 +48,7 @@
     const assetBoxes = assetContainer.getElementsByClassName('asset-box');
     if (assetBoxes.length < 5) {
       const newAssetBox = `
-          @include('components/addAsset')
+          @include('pages/assets/asset')
       `;
       assetContainer.insertAdjacentHTML('beforeend', newAssetBox);
     } else {

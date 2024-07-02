@@ -1,7 +1,7 @@
 @component('layouts/main')
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
-  <form method="post" action="{{ route('checkout.store', { giftSession: giftSession.sessionId }) }}">
+  <form method="post" action="{{ route('checkout.store', { gsId }) }}">
     {{ csrfField() }}
     <section class="hero is-small is-dark mb-2">
       <div class="hero-body">
@@ -17,7 +17,7 @@
           </figure>
         </div>
         <div class="media-content">
-          <p class="title is-4">{{ giftSession.template }}</p>
+          <p class="title is-4">{{ giftSession.templateId }}</p>
           <p class="subtitle is-6">template detail</p>
         </div>
         <div>

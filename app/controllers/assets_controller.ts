@@ -2,26 +2,38 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { randomUUID } from 'crypto'
 
 export default class AssetsController {
-  public async index({ view, session }: HttpContext) {
-    const sessionId = randomUUID()
-    let giftSession = session.get('giftSession') || { sessionId, assetNumber: null }
-    const assetNumber = giftSession.assetNumber
+  public async index({ session, response }: HttpContext) {
+    const gsId = randomUUID()
+    const details = {
+      id: gsId,
+    }
+    session.put(gsId, details)
+    return response.redirect().toRoute('assets.create', { gsId })
+  }
 
-    giftSession.sessionId = sessionId
-    giftSession.assetNumber = assetNumber
-    session.put('giftSession', giftSession)
+  public async create({ request, view, session }: HttpContext) {
+    const gsId = request.param('gsId')
 
-    return view.render('pages/assets/addAssets', { giftSession })
+    const details = session.get(gsId)
+    const assetNumbers = details['assetNumbers']
+
+    return view.render('pages/assets/create', { gsId, assetNumbers })
   }
 
   public async store({ request, response, session }: HttpContext) {
-    const payload = request.except(['_csrf'])
-    const assetNumber = payload.assetNumber
-    let giftSession = session.get('giftSession')
+    const gsId = request.param('gsId')
 
-    giftSession.assetNumber = assetNumber
-    session.put('giftSession', giftSession)
+    let assetNumbers = request.input('assetNumbers')
+    if (!Array.isArray(assetNumbers)) {
+      assetNumbers = [assetNumbers]
+    }
 
-    return response.redirect().toRoute('templates.index', { giftSession })
+    //put asset numbers in session
+    let details = session.get(gsId)
+    details = { ...details, assetNumbers }
+
+    session.put(gsId, details)
+
+    return response.redirect().toRoute('templates.index', { gsId })
   }
 }

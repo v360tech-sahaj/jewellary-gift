@@ -1,111 +1,73 @@
-<style>
-  input[type="radio"] {
-    opacity: 0;
-    position: absolute;
-
-    &:not(:disabled)~label {
-      cursor: pointer;
-    }
-  }
-
-  label {
-    height: 100%;
-    display: block;
-    background: white;
-    border-radius: 20px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    text-align: center;
-    position: relative;
-  }
-
-  input[type="radio"]:checked+label {
-    &::after {
-      color: black;
-      font-family: FontAwesome;
-      border: 2px solid black;
-      content: "\f00c";
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 30px;
-      width: 30px;
-      line-height: 28px;
-      border-radius: 50%;
-      background: #cccccc;
-    }
-  }
-</style>
-
-<div class="card mb-0">
-  <input type="radio" id="{{ labelFor }}" name="template" value="{{ value }}" {{ template===value ? 'checked' : '' }}
-    required>
-  <label for="{{ labelFor }}" class="mb-0 p-1">
-    <div class="card-image">
-      <figure class="image is-4by3">
-        <img src="{{ img }}" alt="{{ placeholder }}" />
-      </figure>
-    </div>
-  </label>
-  <div class="card-content p-1">
-    <div class="content js-modal-trigger has-text-centered" data-target="{{ id }}">View</div>
-  </div>
-</div>
-
-<div id="{{ id }}" class="modal px-3">
-  <div class="modal-background"></div>
-  <div class="modal-content">
-    <div class="box" style="width: 100%; height: 80vh;">
-      <video id="video-{{ id }}" controls style="width: 100%; height: 100%;">
-        <source src="{{ video }}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+<div>
+  <div class="card mb-0">
+    <input type="radio" id="{{ template.label }}" name="templateId" value="{{ template.value }}" {{
+      template===templateId ? 'checked' : '' }} required>
+    <label for="{{ template.label }}" class="mb-0 p-1">
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <img src="{{ template.img }}" alt="{{ template.placeholder }}" />
+        </figure>
+      </div>
+    </label>
+    <div class="card-content p-1">
+      <div class="content js-modal-trigger has-text-centered" data-target="{{ template.id }}">View</div>
     </div>
   </div>
-</div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    function openModal($el) {
-      $el.classList.add('is-active')
-    }
+  <div id="{{ template.id }}" class="modal px-3">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box" style="width: 100%; height: 80vh;">
+        <video id="video-{{ template.id }}" controls style="width: 100%; height: 100%;">
+          <source src="{{ template.video }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
 
-    function closeModal($el) {
-      $el.classList.remove('is-active')
-    }
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      function openModal($el) {
+        $el.classList.add('is-active')
+      }
 
-    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-      const modal = $trigger.dataset.target;
-      const $target = document.getElementById(modal);
+      function closeModal($el) {
+        $el.classList.remove('is-active')
+      }
 
-      $trigger.addEventListener('click', () => {
-        openModal($target);
-        const video = document.getElementById(`video-${modal}`);
-        video.play();
+      (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+        const modal = $trigger.dataset.target;
+        const $target = document.getElementById(modal);
+
+        $trigger.addEventListener('click', () => {
+          openModal($target);
+          const video = document.getElementById(`video-${modal}`);
+          video.play();
+        });
       });
-    });
 
-    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-      const $target = $close.closest('.modal');
+      (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+        const $target = $close.closest('.modal');
 
-      $close.addEventListener('click', () => {
-        closeModal($target);
-        const video = $target.querySelector('video');
-        video.pause();
-        video.currentTime = 0;
-      });
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-          closeModal($modal);
-          const video = $modal.querySelector('video');
+        $close.addEventListener('click', () => {
+          closeModal($target);
+          const video = $target.querySelector('video');
           video.pause();
           video.currentTime = 0;
         });
-      }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+            closeModal($modal);
+            const video = $modal.querySelector('video');
+            video.pause();
+            video.currentTime = 0;
+          });
+        }
+      });
     });
-  });
-</script>
+  </script>
+</div>
