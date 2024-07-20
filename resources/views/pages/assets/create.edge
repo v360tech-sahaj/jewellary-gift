@@ -12,11 +12,15 @@
     <div class="box">
       <div id="asset-container">
         @if(assetNumbers && assetNumbers.length > 0)
+        <div id="qr-reader" class="is-centered"></div>
+        <div class="divider my-2">OR</div>
         @each(assetNumber in assetNumbers)
         @component('pages/assets/asset', {value: assetNumber})
         @end
         @end
         @else
+        <div id="qr-reader" class="is-centered"></div>
+        <div class="divider my-2">OR</div>
         @component('pages/assets/asset')
         @end
         @end
@@ -31,7 +35,7 @@
         </div>
         <div class="level-right">
           <div class="control is-pulled-right">
-            <a class="button is-small is-dark is-outlined" type="button" onclick="addAssetBox()">
+            <a class="button is-light is-info has-text-dark" type="button" onclick="addAssetBox()">
               <i class="fa-solid fa-plus"></i>
             </a>
           </div>
@@ -42,6 +46,7 @@
 </div>
 @end
 
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
   function addAssetBox() {
     const assetContainer = document.getElementById('asset-container');
@@ -65,4 +70,68 @@
       alert("You need to have at least one asset box.");
     }
   }
+
+  function docReady(fn) {
+    // see if DOM is already available
+    if (document.readyState === "complete"
+      || document.readyState === "interactive") {
+      // call on next available tick
+      setTimeout(fn, 1);
+    } else {
+      document.addEventListener("DOMContentLoaded", fn);
+    }
+  }
+
+  docReady(function () {
+    function onScanSuccess(decodedText) {
+      var emptyAssetBox = findEmptyAssetBox();
+
+      if (emptyAssetBox) {
+        // Found an empty asset box, directly set the value
+        emptyAssetBox.value = decodedText;
+        console.log(`Scan result "${decodedText}" set in existing asset box.`);
+      } else if (emptyAssetBox == null) {
+        // No empty asset box found, add a new one
+        addAssetBox(decodedText);
+        console.log(`Scan result "${decodedText}" added as a new asset box.`);
+      }
+    }
+
+    function findEmptyAssetBox() {
+      const assetBoxes = document.getElementsByName('assetNumbers');
+      for (var i = 0; i < assetBoxes.length; i++) {
+        if (assetBoxes[i].value === '') {
+          return assetBoxes[i];
+        }
+      }
+    }
+
+    function addAssetBox(value = '') {
+      const assetContainer = document.getElementById('asset-container');
+      const assetBoxes = assetContainer.getElementsByClassName('asset-box');
+
+      if (assetBoxes.length < 5) {
+        const newAssetBox = `
+          <div class="asset-box mb-3">
+            <div class="control level is-mobile has-icons-left mb-2">
+              <input class="input" type="text" name="assetNumbers" placeholder="Enter asset number" value="${value}" required>
+              <span class="icon is-small is-left">
+                <i class="fas fa-pen"></i>
+              </span>
+              <a class="button is-danger is-light has-text-dark" type="button" onclick="removeAssetBox(this)">
+                <i class="fa-regular fa-trash-can"></i>
+              </a>
+            </div>
+          </div>
+        `;
+        assetContainer.insertAdjacentHTML('beforeend', newAssetBox);
+      } else {
+        alert("You can add a maximum of 5 assets.");
+      }
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess);
+  });
+
 </script>

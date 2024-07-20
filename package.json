@@ -64,6 +64,8 @@
     "@vinejs/vine": "^2.0.0",
     "bulma": "^1.0.1",
     "edge.js": "^6.0.2",
+    "html5-qrcode": "^2.3.8",
+    "jsqr": "^1.4.0",
     "luxon": "^3.4.4",
     "mysql2": "^3.9.7",
     "reflect-metadata": "^0.2.2"

@@ -1,19 +1,7 @@
-<div class="box asset-box mb-3">
-  <div class="file is-centered is-dark mb-0">
-    <label class="file-label mb-0 py-0">
-      <input class="file-input" type="file" accept="image/*" capture="environment">
-      <span class="file-cta">
-        <span class="file-icon">
-          <i class="fas fa-qrcode"></i>
-        </span>
-        <span class="file-label">Scan Qr</span>
-      </span>
-    </label>
-  </div>
-  <div class="divider my-2">OR</div>
+<div class="asset-box mb-3">
   <div class="control level is-mobile has-icons-left mb-2">
-    <input class="input" type="number" name="assetNumbers" placeholder="Enter asset number" value="{{ value || ''}}"
-      required>
+    <input id="qr-reader-results" class="input" type="number" name="assetNumbers" placeholder="Enter asset number"
+      value="{{ value || ''}}" required>
     <span class="icon is-small is-left">
       <i class="fas fa-pen"></i>
     </span>
