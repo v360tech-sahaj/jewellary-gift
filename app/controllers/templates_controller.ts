@@ -19,9 +19,13 @@ export default class TemplatesController {
     const gsId = request.param('gsId')
     const templateId = request.input('templateId')
 
+    const templates = getTemplates()
+    const selectedTemplate = templates.find((template) => template.value === templateId)
+    const price = selectedTemplate ? selectedTemplate.price : null
+
     // Put template in session
     let details = session.get(gsId)
-    details = { ...details, templateId }
+    details = { ...details, templateId, price }
 
     session.put(gsId, details)
 
@@ -68,6 +72,7 @@ function getTemplates() {
       placeholder: 'Template 1',
       label: 'template_1',
       value: 'Template 1',
+      price: 2000.0,
     },
     {
       img: '/images/template-3.jpg',
@@ -76,6 +81,7 @@ function getTemplates() {
       placeholder: 'Template 2',
       label: 'template_2',
       value: 'Template 2',
+      price: 1000.0,
     },
     {
       img: '/images/template-4.jpg',
@@ -84,6 +90,7 @@ function getTemplates() {
       placeholder: 'Template 3',
       label: 'template_3',
       value: 'Template 3',
+      price: 1250.0,
     },
     {
       img: '/images/template-8.jpg',
@@ -92,6 +99,7 @@ function getTemplates() {
       placeholder: 'Template 4',
       label: 'template_4',
       value: 'Template 4',
+      price: 2500.0,
     },
     {
       img: '/images/template-10.jpg',
@@ -100,6 +108,7 @@ function getTemplates() {
       placeholder: 'Template 5',
       label: 'template_5',
       value: 'Template 5',
+      price: 5500.0,
     },
   ]
 }

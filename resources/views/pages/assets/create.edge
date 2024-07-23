@@ -3,36 +3,43 @@
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
   <form method="post" action="{{ route('assets.store', { gsId }) }}">
     {{ csrfField() }}
-    <section class="hero is-small is-dark mb-2">
-      <div class="hero-body">
-        <p class="title is-size-5">Step 1</p>
-        <p class="subtitle is-size-6">Add Assets</p>
-      </div>
-    </section>
+
+    {{-- Header --}}
+    @component('components/header', {
+    title: 'Step 1',
+    subtitle: 'Add Assets'
+    })
+    @end
+
     <div class="box">
       <div id="asset-container">
         @if(assetNumbers && assetNumbers.length > 0)
-        <div id="qr-reader" class="is-centered"></div>
+        {{-- Qr Scanner --}}
+        <div id="qr-reader" class="is-centered" style="position: relative; border: none;"></div>
         <div class="divider my-2">OR</div>
         @each(assetNumber in assetNumbers)
+        {{-- Asset Box --}}
         @component('pages/assets/asset', {value: assetNumber})
         @end
         @end
         @else
-        <div id="qr-reader" class="is-centered"></div>
+        <div id="qr-reader" class="is-centered" style="position: relative; padding: 10px; border: none;"></div>
         <div class="divider my-2">OR</div>
         @component('pages/assets/asset')
         @end
         @end
       </div>
 
+      {{-- Buttons --}}
       <div class="level is-mobile">
         <div class="level-left">
           <div class="control">
-            <a href="{{ route('home') }}" class="button is-danger is-small is-light" type="button">Cancel</a>
-            <button type="submit" class="button is-small is-dark">Next</button>
+            <a href="{{ route('home') }}" class="button is-small is-light" type="button">Cancel</a>
+            <button type="submit" class="button is-small is-dark has-text-warning">Next</button>
           </div>
         </div>
+
+        {{-- Add Asset Box button --}}
         <div class="level-right">
           <div class="control is-pulled-right">
             <a class="button is-light is-info has-text-dark" type="button" onclick="addAssetBox()">
@@ -48,6 +55,7 @@
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+  // Add Assetbox
   function addAssetBox() {
     const assetContainer = document.getElementById('asset-container');
     const assetBoxes = assetContainer.getElementsByClassName('asset-box');
@@ -61,6 +69,7 @@
     }
   }
 
+  // Remove Assetbox
   function removeAssetBox(deleteButton) {
     const assetBoxes = document.getElementsByClassName('asset-box');
     if (assetBoxes.length > 1) {
@@ -71,6 +80,7 @@
     }
   }
 
+  // Qr Scanner
   function docReady(fn) {
     // see if DOM is already available
     if (document.readyState === "complete"
@@ -91,7 +101,7 @@
         emptyAssetBox.value = decodedText;
         console.log(`Scan result "${decodedText}" set in existing asset box.`);
       } else if (emptyAssetBox == null) {
-        // No empty asset box found, add a new one
+        // No empty asset box found, add a new assetBox
         addAssetBox(decodedText);
         console.log(`Scan result "${decodedText}" added as a new asset box.`);
       }
@@ -124,6 +134,7 @@
             </div>
           </div>
         `;
+
         assetContainer.insertAdjacentHTML('beforeend', newAssetBox);
       } else {
         alert("You can add a maximum of 5 assets.");

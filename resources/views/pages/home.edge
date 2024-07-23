@@ -1,14 +1,15 @@
 @component('layouts/main')
 <div class="container">
-  <section class="hero is-small is-dark">
-    <div class="hero-body">
-      <p class="title">Home</p>
-      <p class="subtitle">Welcome to Gifting Studio</p>
-    </div>
-  </section>
+
+  {{-- Header --}}
+  @component('components/header', {
+  title: 'Home',
+  subtitle: 'Welcome to Gifting Studio'
+  })
+  @end
 
   {{-- Navigation purpose only --}}
-  <a href="{{ route('assets.index') }}" class="button is-dark mt-1">Request for Gift</a><br>
-  <a href="{{ route('/login') }}" class="button mt-1">Login Page</a><br>
+  <a href="{{ route('assets.index') }}" class="button is-dark mt-1 has-text-warning">Request for Gift</a><br>
+  <a href="{{ route('/login') }}" class="button is-dark mt-1 has-text-warning">Login Page</a><br>
 </div>
 @end

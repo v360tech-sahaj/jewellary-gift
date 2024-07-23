@@ -3,53 +3,122 @@
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
   <form method="post" action="{{ route('checkout.store', { gsId }) }}">
     {{ csrfField() }}
-    <section class="hero is-small is-dark mb-2">
-      <div class="hero-body">
-        <p class="title is-size-5">Step 4</p>
-        <p class="subtitle is-size-6">Checkout</p>
-      </div>
-    </section>
+
+    {{-- Header --}}
+    @component('components/header', {
+    title: 'Step 4',
+    subtitle: 'Checkout'
+    })
+    @end
+
     <div class="box">
-      <div class="media">
-        <div class="media-left">
-          <figure class="image is-48x48">
-            <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
-          </figure>
-        </div>
+      {{-- Template detail and price --}}
+      <div class="media mb-auto">
         <div class="media-content">
-          <p class="title is-4">{{ giftSession.templateId }}</p>
+          <p class="title is-4">{{ details.templateId }}</p>
           <p class="subtitle is-6">template detail</p>
         </div>
         <div>
-          <p>$200.00</p>
+          <p class="has-text-weight-semibold">${{details.price.toFixed(2)}}</p>
         </div>
       </div>
-      <div class="columns is-mobile">
-        <div class="column pr-0">
-          <input class="input" type="text" placeholder="Enter promo code">
+      <hr class="my-4">
+
+      {{-- Promocode Section --}}
+      <div class="columns mb-0 is-mobile">
+        <div class="column is-three-quarters pr-0">
+          <input id="promoCode" class="input" type="text" name="promoCode" placeholder="Enter promo code">
+          <button id="removePromoButton" class="button is-pulled-right is-light has-text-danger is-small mt-1" disabled>
+            Remove Promocode ?</button>
         </div>
-        <div class="column is-one-quarter"><a href="#" class="button is-fullwidth">Apply</a></div>
+
+        <div class="column pr-0">
+          <button type="button" id="applyPromoBtn" class="button is-fullwidth">Apply</button>
+        </div>
       </div>
 
+      {{-- Subtotal and discount --}}
       <div>
         <span>Subtotal</span>
-        <span class="is-pulled-right">$200.00</span>
+        <span class="is-pulled-right has-text-weight-semibold">${{details.price.toFixed(2)}}</span>
       </div>
 
       <div>
         <span>Discount</span>
-        <span class="is-pulled-right">$50.00</span>
+        <span id="discountAmount" class="is-pulled-right has-text-weight-semibold">$0.00</span>
       </div>
-      <hr>
+      <hr class="my-3">
 
+      {{-- Total --}}
       <div class="mb-4">
         <span>Total</span>
-        <span class="is-pulled-right">$150.00</span>
+        <span id="totalAmount" class="is-pulled-right has-text-weight-semibold">${{ details.price.toFixed(2) }}</span>
       </div>
-      <button class="button is-dark is-rounded is-fullwidth mb-2" type="submit">Pay</button>
-      <button class="button is-warning is-light is-rounded is-fullwidth" type="button"
-        onclick="history.back()">Cancel</button>
+
+      {{-- Buttons --}}
+      <p class="buttons">
+        <button id="payButton" class="button is-dark is-rounded has-text-warning is-fullwidth" type="submit">
+          Pay ${{ details.price.toFixed(2) }}</button>
+        <button class="button is-warning is-light is-rounded is-fullwidth" type="button"
+          onclick="history.back()">Cancel</button>
+      </p>
     </div>
   </form>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const promoCodeInput = document.getElementById('promoCode');
+    const applyPromoBtn = document.getElementById('applyPromoBtn');
+    const discountAmount = document.getElementById('discountAmount');
+    const totalAmount = document.getElementById('totalAmount');
+    const payButton = document.getElementById('payButton');
+    const applyButton = document.getElementById('applyButton')
+    const removePromoButton = document.getElementById('removePromoButton');
+
+    // Apply Promocode
+    applyPromoBtn.addEventListener('click', function (event) {
+      event.preventDefault();
+      const promoValue = parseFloat(promoCodeInput.value);
+      if (!isNaN(promoValue)) {
+
+        applyPromoBtn.disabled = true;
+        removePromoButton.disabled = false;
+
+        // Update discount price
+        discountAmount.textContent = `$${promoValue.toFixed(2)}`;
+
+        // Update total price
+        const subtotal = parseFloat('{{ details.price }}');
+        const total = subtotal - promoValue;
+        totalAmount.textContent = `$${total.toFixed(2)}`;
+
+        payButton.textContent = `Pay $${total.toFixed(2)}`;
+
+        // success message
+        const successMessage = document.createElement('span');
+        successMessage.textContent = ' Discount applied successfully';
+        successMessage.style.color = 'green';
+
+        const inputContainer = promoCodeInput.parentNode;
+        inputContainer.appendChild(successMessage);
+
+        setTimeout(function () {
+          successMessage.remove();
+        }, 2000);
+      }
+    });
+
+    // Remove Promocode
+    removePromoButton.addEventListener('click', function () {
+      promoCodeInput.value = '';
+      discountAmount.textContent = '$0.00';
+      totalAmount.textContent = `${{ details.price.toFixed(2) }}`;
+      payButton.textContent = `Pay ${{ details.price.toFixed(2) }}`;
+      applyPromoBtn.disabled = false;
+      promoCodeInput.disabled = false;
+      removePromoButton.disabled = true;
+    });
+  });
+</script>
 @end

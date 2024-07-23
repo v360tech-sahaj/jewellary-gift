@@ -1,4 +1,5 @@
 <div>
+  {{-- Template Preview --}}
   <div class="card mb-0">
     <input type="radio" id="{{ template.label }}" name="templateId" value="{{ template.value }}" {{
       template===templateId ? 'checked' : '' }} required>
@@ -14,15 +15,21 @@
     </div>
   </div>
 
+  {{-- Modal --}}
   <div id="{{ template.id }}" class="modal px-3">
     <div class="modal-background"></div>
-    <div class="modal-content">
-      <div class="box" style="width: 100%; height: 80vh;">
-        <video id="video-{{ template.id }}" controls style="width: 100%; height: 100%;">
+    <div class="modal-card">
+      <header class="modal-card-head p-3 mb-0 level is-mobile has-background-grey-lighter">
+        <p class="modal-card-title level-left">{{ template.placeholder }}</p>
+        <button type="button" class="delete level-right" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body py-0 px-3 my-auto has-background-grey-lighter">
+        <video id="video-{{ template.id }}" controls style="width: 100%; height: auto;">
           <source src="{{ template.video }}" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-      </div>
+      </section>
+      <footer class="modal-card-foot p-2 mt-0 has-background-grey-lighter"></footer>
     </div>
   </div>
 

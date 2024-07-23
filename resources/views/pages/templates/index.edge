@@ -38,12 +38,15 @@
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
   <form method="post" action="{{ route('templates.store', { gsId }) }}">
     {{ csrfField() }}
-    <section class="hero is-small is-dark mb-2 ">
-      <div class="hero-body">
-        <p class="title is-size-5">Step 2</p>
-        <p class="subtitle is-size-6">Select templates</p>
-      </div>
-    </section>
+
+    {{-- Header --}}
+    @component('components/header', {
+    title: 'Step 2',
+    subtitle: 'Select Templates'
+    })
+    @end
+
+    {{-- Templates --}}
     <div class="box">
       <div class="grid has-text-centered mb-0">
         @each(t in templates)
@@ -53,10 +56,12 @@
         </div>
         @end
       </div>
+
+      {{-- Buttons --}}
       <div class="field is-grouped">
         <div class="control">
           <a href="{{ route('assets.create', {gsId}) }}" class="button is-small is-light" type="button">Previous</a>
-          <button class="button is-small is-dark" type="submit">Next</button>
+          <button class="button is-small is-dark has-text-warning" type="submit">Next</button>
         </div>
       </div>
     </div>

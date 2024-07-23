@@ -3,14 +3,17 @@
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
   <form method="post" action="{{ route('templates.detail.store', { gsId }) }}">
     {{ csrfField() }}
-    <section class="hero is-small is-dark mb-2">
-      <div class="hero-body">
-        <p class="title is-size-5">Step 3</p>
-        <p class="subtitle is-size-6">Enter template details</p>
-      </div>
-    </section>
+
+    {{-- Header --}}
+    @component('components/header', {
+    title: 'Step 3',
+    subtitle: 'Enter Template Details'
+    })
+    @end
+
     <div class="box">
       <div class="file has-name is-centered is-boxed is-small mb-0">
+        {{-- Add File --}}
         <label class="file-label">
           <input class="file-input" name="file" type="file" id="file-input" value="{{ file || ''}}"
             onchange="displayFileName()" />
@@ -24,6 +27,8 @@
         </label>
       </div>
       <div class="divider my-2">OR</div>
+
+      {{-- Enter a message --}}
       <div class="control has-icons-left mb-2">
         <input class="input" name="message" type="text" placeholder="Any Special Message" value="{{ message || ''}}">
         <span class="icon is-small is-left">
@@ -31,6 +36,8 @@
         </span>
       </div>
       <div class="divider my-2">OR</div>
+
+      {{-- Capture a video message --}}
       <div class="file is-centered is-dark is-boxed is-small mb-2">
         <label class="file-label">
           <input class="file-input" name="video" type="file" accept="video/*" capture="environment">
@@ -42,10 +49,12 @@
           </span>
         </label>
       </div>
+
+      {{-- Buttons --}}
       <div class="field is-grouped">
         <div class="control">
           <button class="button is-small is-light" type="button" onclick="history.back()">Previous</button>
-          <button class="button is-small is-dark" type="submit">Next</button>
+          <button class="button is-small is-dark has-text-warning" type="submit">Next</button>
         </div>
       </div>
     </div>
