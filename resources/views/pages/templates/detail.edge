@@ -1,7 +1,7 @@
 @component('layouts/main')
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
-  <form method="post" action="{{ route('templates.detail.store', { gsId }) }}">
+  <form method="post" action="{{ route('templates.detail.store', { gsId }) }}" enctype="multipart/form-data">
     {{ csrfField() }}
 
     {{-- Header --}}

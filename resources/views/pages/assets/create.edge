@@ -15,7 +15,7 @@
       <div id="asset-container">
         @if(assetNumbers && assetNumbers.length > 0)
         {{-- Qr Scanner --}}
-        <div id="qr-reader" class="is-centered" style="position: relative; border: none;"></div>
+        <div id="qr-reader" class="is-centered"></div>
         <div class="divider my-2">OR</div>
         @each(assetNumber in assetNumbers)
         {{-- Asset Box --}}
@@ -23,7 +23,7 @@
         @end
         @end
         @else
-        <div id="qr-reader" class="is-centered" style="position: relative; padding: 10px; border: none;"></div>
+        <div id="qr-reader" class="is-centered"></div>
         <div class="divider my-2">OR</div>
         @component('pages/assets/asset')
         @end

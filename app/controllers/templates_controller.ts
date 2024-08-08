@@ -1,4 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
 
 export default class TemplatesController {
   public async index({ request, view, session }: HttpContext) {
@@ -49,9 +50,32 @@ export default class TemplatesController {
     const gsId = request.param('gsId')
 
     const payload = request.except(['_csrf'])
-    const file = payload.file
     const message = payload.message
-    const video = payload.video
+
+    let file = null
+    if (request.file('file')) {
+      file = request.file('file')
+
+      try {
+        await file?.move(app.makePath(`uploads/${gsId}`))
+      } catch (error) {
+        console.error(error)
+        return response.internalServerError('Failed to store file')
+      }
+    }
+
+    let video = null
+    if (request.file('video')) {
+      video = request.file('video')
+
+      try {
+        await video?.move(app.makePath(`uploads/${gsId}`))
+      } catch (error) {
+        0.0
+        console.error(error)
+        return response.internalServerError('Failed to store video')
+      }
+    }
 
     // Put details from session
     let details = session.get(gsId)
