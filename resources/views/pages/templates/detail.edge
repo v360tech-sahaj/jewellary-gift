@@ -12,43 +12,69 @@
     @end
 
     <div class="box">
-      <div class="file has-name is-centered is-boxed is-small mb-0">
+      <div class="file has-name is-dark is-centered is-boxed is-small mb-0">
         {{-- Add File --}}
         <label class="file-label">
-          <input class="file-input" name="file" type="file" id="file-input" value="{{ file || ''}}"
-            onchange="displayFileName()" />
+          <input class="file-input" name="files[]" type="file" id="file-input" multiple />
           <span class="file-cta">
             <span class="file-icon">
               <i class="fas fa-upload"></i>
             </span>
-            <span class="file-label"> Choose a file… </span>
+            <span class="file-label"> Choose files… </span>
           </span>
           <span class="file-name has-text-centered" id="file-name"> No file selected </span>
         </label>
       </div>
+      <p id="file-error" class="has-text-danger has-text-centered"></p>
+      <div id="file-list" class="has-text-centered"></div>
       <div class="divider my-2">OR</div>
 
-      {{-- Enter a message --}}
-      <div class="control has-icons-left mb-2">
-        <input class="input" name="message" type="text" placeholder="Any Special Message" value="{{ message || ''}}">
-        <span class="icon is-small is-left">
-          <i class="fas fa-envelope"></i>
-        </span>
+      {{-- Message Boxes --}}
+      <div id="message-container">
+        @if(messages && messages.length > 0)
+        @each(message in messages)
+        @component('pages/templates/messageBox', {message: message})
+        @end
+        @end
+        @else
+        @component('pages/templates/messageBox')
+        @end
+        @end
       </div>
       <div class="divider my-2">OR</div>
 
       {{-- Capture a video message --}}
-      <div class="file is-centered is-dark is-boxed is-small mb-2">
+      <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
         <label class="file-label">
-          <input class="file-input" name="video" type="file" accept="video/*" capture="environment">
+          <input class="file-input" name="videos[]" type="file" accept="video/*" id="video-input" multiple />
           <span class="file-cta">
             <span class="file-icon">
               <i class="fas fa-video"></i>
             </span>
-            <span class="file-label">Capture a video message</span>
+            <span class="file-label has-text-centered">Capture or upload <br> video message</span>
           </span>
+          <span class="file-name has-text-centered" id="video-name"> No video selected </span>
         </label>
       </div>
+      <p id="video-error" class="has-text-danger has-text-centered"></p>
+      <div id="video-list" class="has-text-centered"></div>
+      <div class="divider my-2">OR</div>
+
+      {{-- Capture or Upload an Audio Message --}}
+      <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
+        <label class="file-label">
+          <input class="file-input" name="audios[]" type="file" accept="audio/*" id="audio-input" multiple />
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-microphone"></i>
+            </span>
+            <span class="file-label">Capture or Upload <br> audio message</span>
+          </span>
+          <span class="file-name has-text-centered" id="audio-name"> No audio selected </span>
+        </label>
+      </div>
+      <p id="audio-error" class="has-text-danger has-text-centered"></p>
+      <div id="audio-list" class="has-text-centered"></div>
 
       {{-- Buttons --}}
       <div class="field is-grouped">
@@ -62,15 +88,136 @@
 </div>
 
 <script>
-  function displayFileName() {
-    const fileInput = document.getElementById('file-input');
-    const fileName = document.getElementById('file-name');
+  document.addEventListener('DOMContentLoaded', () => {
+    const maxFiles = 5;
+    const maxVideos = 5;
+    const maxAudios = 5;
 
-    if (fileInput.files.length > 0) {
-      fileName.textContent = fileInput.files[0].name;
-    } else {
-      fileName.textContent = 'No file selected';
+    // Handle Files
+    function handleFiles() {
+      const fileInput = document.getElementById('file-input');
+      const fileNameSpan = document.getElementById('file-name');
+      const fileError = document.getElementById('file-error');
+      const fileList = document.getElementById('file-list');
+      const files = fileInput.files;
+
+      if (files.length > maxFiles) {
+        fileInput.value = '';
+        fileError.textContent = `You can only select up to ${maxFiles} files`;
+        fileNameSpan.textContent = 'No file selected';
+        fileList.innerHTML = '';
+        setTimeout(() => {
+          fileError.textContent = '';
+          fileNameSpan.textContent = 'No file selected';
+        }, 3000);
+        return;
+      }
+
+      fileError.textContent = '';
+      const fileNames = Array.from(files).map(file => file.name).join(', ');
+      fileNameSpan.textContent = fileNames;
+
+      fileList.innerHTML = '';
+      Array.from(files).forEach(file => {
+        const fileNameElement = document.createElement('div');
+        fileNameElement.textContent = file.name;
+        fileList.appendChild(fileNameElement);
+      });
     }
-  }
+
+    // Handle Videos
+    function handleVideos() {
+      const videoInput = document.getElementById('video-input');
+      const videoNamesSpan = document.getElementById('video-name');
+      const videoError = document.getElementById('video-error');
+      const videoList = document.getElementById('video-list')
+      const videos = videoInput.files;
+
+      if (videos.length > maxVideos) {
+        videoInput.value = ''; // Clear input
+        videoError.textContent = `You can only select up to ${maxVideos} videos`;
+        videoNamesSpan.textContent = 'No video selected';
+        setTimeout(() => {
+          videoError.textContent = '';
+          videoNamesSpan.innerHTML = 'No video selected'
+        }, 3000)
+        return;
+      }
+
+      videoError.textContent = '';
+      const videoNames = Array.from(videos).map(video => video.name).join(', ');
+      videoNamesSpan.textContent = videoNames;
+
+      videoList.innerHTML = '';
+      Array.from(videos).forEach(video => {
+        const videoNameElement = document.createElement('div');
+        videoNameElement.textContent = video.name;
+        videoList.appendChild(videoNameElement);
+      });
+    }
+
+    // Handle Audios
+    function handleAudios() {
+      const audioInput = document.getElementById('audio-input');
+      const audioNamesSpan = document.getElementById('audio-name');
+      const audioError = document.getElementById('audio-error');
+      const audioList = document.getElementById('audio-list');
+      const audios = audioInput.files;
+
+      if (audios.length > maxAudios) {
+        audioInput.value = ''; // Clear input
+        audioError.textContent = `You can only select up to ${maxAudios} audios`;
+        audioNamesSpan.textContent = 'No audio selected';
+        setTimeout(() => {
+          audioError.textContent = '';
+          audioNamesSpan.textContent = 'No audio selected';
+        }, 3000);
+        return;
+      }
+
+      audioError.textContent = '';
+      const audioNames = Array.from(audios).map(audio => audio.name).join(', ');
+      audioNamesSpan.textContent = audioNames;
+
+      audioList.innerHTML = '';
+      Array.from(audios).forEach(audio => {
+        const audioNameElement = document.createElement('div');
+        audioNameElement.textContent = audio.name;
+        audioList.appendChild(audioNameElement);
+      });
+    }
+
+    // Handle Message Boxes
+    function addMessageBox() {
+      const messageContainer = document.getElementById('message-container');
+      const messageBoxes = messageContainer.getElementsByClassName('message-box');
+      if (messageBoxes.length < 5) {
+        const newMessageBox = `
+          @component('pages/templates/messageBox')
+          @end
+        `;
+        messageContainer.insertAdjacentHTML('beforeend', newMessageBox);
+      } else {
+        alert("You can add a maximum of 5 messages.");
+      }
+    }
+
+    function removeMessageBox(event) {
+      if (event.target.classList.contains('remove-message')) {
+        const messageBox = event.target.closest('.message-box');
+        if (document.getElementsByClassName('message-box').length > 1) {
+          messageBox.remove();
+        } else {
+          alert("You need to have at least one message box.");
+        }
+      }
+    }
+
+    document.getElementById('file-input').addEventListener('change', handleFiles);
+    document.getElementById('video-input').addEventListener('change', handleVideos);
+    document.getElementById('audio-input').addEventListener('change', handleAudios);
+    document.getElementById('add-message').addEventListener('click', addMessageBox);
+    document.getElementById('message-container').addEventListener('click', removeMessageBox);
+  });
 </script>
 @end

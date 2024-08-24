@@ -39,48 +39,69 @@ export default class TemplatesController {
     // Get detail from session
     const details = session.get(gsId)
 
-    const message = details.message
-    const file = details.file
-    const video = details.video
+    const messages = details.messages
+    const files = details.files
+    const videos = details.videos
+    const audios = details.audios
 
-    return view.render('pages/templates/detail', { gsId, message, file, video })
+    return view.render('pages/templates/detail', { gsId, messages, files, videos, audios })
   }
 
   public async storeDetail({ request, session, response }: HttpContext) {
     const gsId = request.param('gsId')
 
     const payload = request.except(['_csrf'])
-    const message = payload.message
+    const messages = payload.messages
 
-    let file = null
-    if (request.file('file')) {
-      file = request.file('file')
-
+    // Handle files
+    const files = request.files('files')
+    if (files && files.length > 0) {
+      const uploadPath = app.makePath(`uploads/${gsId}`)
       try {
-        await file?.move(app.makePath(`uploads/${gsId}`))
+        for (const file of files) {
+          await file.move(uploadPath)
+        }
       } catch (error) {
         console.error(error)
-        return response.internalServerError('Failed to store file')
+        return response.internalServerError('Failed to upload files')
       }
     }
 
-    let video = null
-    if (request.file('video')) {
-      video = request.file('video')
+    // Handle videos
+    const videos = request.files('videos', {
+      size: '20mb',
+      extnames: ['mov', 'mp4', 'mkv'],
+    })
 
+    if (videos && videos.length > 0) {
+      const uploadPath = app.makePath(`uploads/${gsId}`)
       try {
-        await video?.move(app.makePath(`uploads/${gsId}`))
+        for (const video of videos) {
+          await video.move(uploadPath)
+        }
       } catch (error) {
-        0.0
         console.error(error)
-        return response.internalServerError('Failed to store video')
+        return response.internalServerError('Failed to upload videos')
+      }
+    }
+
+    const audios = request.files('audios')
+    if (audios && audios.length > 0) {
+      const uploadPath = app.makePath(`uploads/${gsId}`)
+      try {
+        for (const audio of audios) {
+          await audio.move(uploadPath)
+        }
+      } catch (error) {
+        console.error(error)
+        return response.internalServerError('Failed to store audio')
       }
     }
 
     // Put details from session
     let details = session.get(gsId)
 
-    details = { ...details, file, message, video }
+    details = { ...details, files, messages, videos, audios }
     session.put(gsId, details)
 
     return response.redirect().toRoute('checkout.index', { gsId })

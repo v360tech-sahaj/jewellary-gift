@@ -7,6 +7,7 @@ export default class CheckoutsController {
     const gsId = request.param('gsId')
     let details = session.get(gsId)
 
+    // console.log('data at checkout index', session.get(gsId))
     return view.render('pages/summary', { details, gsId })
   }
 
@@ -15,24 +16,38 @@ export default class CheckoutsController {
     const promoCode = request.input('promoCode')
 
     let details = session.get(gsId)
-    if (details.file) {
-      const filePath = details.file.filePath
-      const fileName = details.file.clientName
 
-      // Upload file to server
-      await S3Service.uploadToS3(fileName, filePath)
-      await fs.unlink(filePath)
+    try {
+      if (details.files && Array.isArray(details.files)) {
+        for (const file of details.files) {
+          const { filePath, clientName } = file
+          // Upload file to server
+          await S3Service.uploadToS3(clientName, filePath)
+          await fs.unlink(filePath)
+        }
+      }
+
+      if (details.videos && Array.isArray(details.videos)) {
+        for (const video of details.videos) {
+          const { filePath, clientName } = video
+          // Upload video to server
+          await S3Service.uploadToS3(clientName, filePath)
+          await fs.unlink(filePath)
+        }
+      }
+
+      if (details.audios && Array.isArray(details.audios)) {
+        for (const audio of details.audios) {
+          const { filePath, clientName } = audio
+          // Upload audio to server
+          await S3Service.uploadToS3(clientName, filePath)
+          await fs.unlink(filePath)
+        }
+      }
+      await fs.rmdir(`uploads/${gsId}`)
+    } catch (error) {
+      console.error(error)
     }
-
-    if (details.video) {
-      const videoPath = details.video.filePath
-      const videoName = details.video.clientName
-
-      // Upload video to server
-      await S3Service.uploadToS3(videoName, videoPath)
-      await fs.unlink(videoPath)
-    }
-    await fs.rmdir(`uploads/${gsId}`)
 
     const paidAmt = details.price - promoCode
     details = { ...details, promoCode, paidAmt }
