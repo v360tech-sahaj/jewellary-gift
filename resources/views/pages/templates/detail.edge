@@ -12,69 +12,83 @@
     @end
 
     <div class="box">
-      <div class="file has-name is-dark is-centered is-boxed is-small mb-0">
-        {{-- Add File --}}
-        <label class="file-label">
-          <input class="file-input" name="files[]" type="file" id="file-input" multiple />
-          <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-upload"></i>
+      {{-- Add File --}}
+      <div>
+        <div class="file has-name is-dark is-centered is-boxed is-small mb-0">
+          <label class="file-label">
+            <input class="file-input" name="files[]" type="file" id="file-input" multiple />
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label"> Choose files… </span>
             </span>
-            <span class="file-label"> Choose files… </span>
-          </span>
-          <span class="file-name has-text-centered" id="file-name"> No file selected </span>
-        </label>
-      </div>
-      <p id="file-error" class="has-text-danger has-text-centered"></p>
-      <div id="file-list" class="has-text-centered"></div>
-      <div class="divider my-2">OR</div>
-
-      {{-- Message Boxes --}}
-      <div id="message-container">
-        @if(messages && messages.length > 0)
-        @each(message in messages)
-        @component('pages/templates/messageBox', {message: message})
-        @end
-        @end
-        @else
-        @component('pages/templates/messageBox')
-        @end
-        @end
+            <span class="file-name has-text-centered" id="file-name"> No file selected </span>
+          </label>
+        </div>
+        <p id="file-error" class="has-text-danger has-text-centered"></p>
+        <div id="file-list" class="has-text-centered"></div>
       </div>
       <div class="divider my-2">OR</div>
 
       {{-- Capture a video message --}}
-      <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
-        <label class="file-label">
-          <input class="file-input" name="videos[]" type="file" accept="video/*" id="video-input" multiple />
-          <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-video"></i>
+      <div>
+        <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
+          <label class="file-label">
+            <input class="file-input" name="videos[]" type="file" accept="video/*" id="video-input" multiple />
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-video"></i>
+              </span>
+              <span class="file-label has-text-centered">Capture or upload <br> video message</span>
             </span>
-            <span class="file-label has-text-centered">Capture or upload <br> video message</span>
-          </span>
-          <span class="file-name has-text-centered" id="video-name"> No video selected </span>
-        </label>
+            <span class="file-name has-text-centered" id="video-name"> No video selected </span>
+          </label>
+        </div>
+        <p id="video-error" class="has-text-danger has-text-centered"></p>
+        <div id="video-list" class="has-text-centered"></div>
       </div>
-      <p id="video-error" class="has-text-danger has-text-centered"></p>
-      <div id="video-list" class="has-text-centered"></div>
       <div class="divider my-2">OR</div>
 
-      {{-- Capture or Upload an Audio Message --}}
-      <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
-        <label class="file-label">
-          <input class="file-input" name="audios[]" type="file" accept="audio/*" id="audio-input" multiple />
-          <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-microphone"></i>
+      <div>
+        {{-- Capture or Upload an Audio Message --}}
+        <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
+          <label class="file-label">
+            <input class="file-input" name="audios[]" type="file" accept="audio/*" id="audio-input" multiple />
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-microphone"></i>
+              </span>
+              <span class="file-label">Capture or Upload <br> audio message</span>
             </span>
-            <span class="file-label">Capture or Upload <br> audio message</span>
-          </span>
-          <span class="file-name has-text-centered" id="audio-name"> No audio selected </span>
-        </label>
+            <span class="file-name has-text-centered" id="audio-name"> No audio selected </span>
+          </label>
+        </div>
+        <p id="audio-error" class="has-text-danger has-text-centered"></p>
+        <div id="audio-list" class="has-text-centered"></div>
       </div>
-      <p id="audio-error" class="has-text-danger has-text-centered"></p>
-      <div id="audio-list" class="has-text-centered"></div>
+      <div class="divider my-2">OR</div>
+
+      {{-- Message Boxes --}}
+      <div>
+        <div id="message-container">
+          @if(messages && messages.length > 0)
+          @each(message in messages)
+          @component('pages/templates/messageBox', {message: message})
+          @end
+          @end
+          @else
+          @component('pages/templates/messageBox')
+          @end
+          @end
+        </div>
+        <div class="level is-mobile">
+          <div class="level-left"></div>
+          <div class="level-right">
+            <a class="button is-light is-info is-small has-text-dark" id="add-message" type="button">Add Message</a>
+          </div>
+        </div>
+      </div>
 
       {{-- Buttons --}}
       <div class="field is-grouped">
@@ -83,6 +97,7 @@
           <button class="button is-small is-dark has-text-warning" type="submit">Next</button>
         </div>
       </div>
+
     </div>
   </form>
 </div>

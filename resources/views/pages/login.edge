@@ -2,16 +2,18 @@
 <div class="container">
   <form action="{{ route('home') }}">
     {{ csrfField() }}
-    <section class="is-relative section has-background-light">
-      <div class="columns is-vcentered">
+    <section class=" section has-background-light" style="height: 100vh;">
+      <div class="columns is-vcentered is-centered" style="height: 100%;">
         <div class="column is-6 mb-8">
           <div class="title is-2 mb-0">Welcome!</div>
           <p class="is-size-5 has-text-grey-dark">Jewellery Gifting</p>
         </div>
         <div class="column is-5">
+          {{-- Sign in box --}}
           <div class="box has-background-white has-text-centered">
             <form action="#">
               <h3 class="title is-4 mt-4 mb-3">Sign In</h3>
+              {{-- Sign in credentials --}}
               <div class="mb-2">
                 <div class="control has-icons-left mb-1">
                   <input class="input" type="email" placeholder="anything@email.com" required>
@@ -26,13 +28,13 @@
                   </span>
                 </div>
               </div>
-
               <button type="submit" class="button is-dark is-fullwidth">Login</button>
               <small><a href="#">Forgot password</a></small>
 
               <div class="divider my-2">OR</div>
 
               <div class="field">
+                {{-- Google Sign in --}}
                 <div class="control">
                   <a class="button is-link is-light is-fullwidth mb-2" href="{{ route('/google/sign-in') }}">
                     <span class="icon">
@@ -41,6 +43,8 @@
                     <span>Sign in with Google</span>
                   </a>
                 </div>
+
+                {{-- Twitter Sign in --}}
                 <div class="control">
                   <a class="button is-info is-fullwidth mb-2" href="#">
                     <span class="icon">
