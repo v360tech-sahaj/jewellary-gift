@@ -5,7 +5,7 @@ import Consumer from './consumer.js'
 import Retailer from './retailer.js'
 
 export default class GiftVoucher extends BaseModel {
-  static connection = 'mysql'
+  static connection = 'console'
 
   @column({ isPrimary: true })
   declare id: number

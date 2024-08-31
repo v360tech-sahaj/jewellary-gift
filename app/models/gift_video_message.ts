@@ -1,21 +1,23 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class GiftTemplateCategory extends BaseModel {
+export default class GiftVideoMessage extends BaseModel {
   static connection = 'console'
 
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare parent_id: number | null
+  declare code: string
 
   @column()
-  declare name: string
+  declare title: string
 
   @column()
-  declare note: string
+  declare max_duration: number | null
+
+  @column()
+  declare meta: JSON | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -31,7 +33,4 @@ export default class GiftTemplateCategory extends BaseModel {
 
   @column()
   declare deletedBy: number | null
-
-  @belongsTo(() => GiftTemplateCategory, { foreignKey: 'parent_id' })
-  declare parentCategory: BelongsTo<typeof GiftTemplateCategory>
 }

@@ -4,7 +4,7 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import GiftTemplateCategory from './gift_template_category.js'
 
 export default class GiftTemplate extends BaseModel {
-  static connection = 'mysql'
+  static connection = 'console'
 
   @column({ isPrimary: true })
   declare id: number
