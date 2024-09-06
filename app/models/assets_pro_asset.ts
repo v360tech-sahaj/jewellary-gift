@@ -5,7 +5,10 @@ export default class AssetsProAsset extends BaseModel {
   static connection = 'console'
 
   @column({ isPrimary: true })
-  declare id: number
+  declare code: number
+
+  @column()
+  declare id: string
 
   @column()
   declare asset_name: string

@@ -1,11 +1,17 @@
+<div class="is-size-6 has-text-weight-medium is-capitalized">{{ messageDescription || '' }}
+  @if(isRequired)
+  <span class="has-text-danger">*</span>
+  @else
+  <span class="is-size-7 has-text-weight-normal">(Optional)</span>
+  @end
+</div>
+
 <div class="message-box mb-2">
-  <div class="control level is-mobile has-icons-left mb-2">
-    <input class="input" name="messages[]" type="text" placeholder="Any Special Message" value="{{message || ''}}" />
+  <div class="control level is-mobile has-icons-left">
+    <input class="input is-dark is-small" name="messages[]" type="text" placeholder="Any Special Message"
+      value="{{message || ''}}" {{ isRequired ? 'required' : '' }} />
     <span class="icon is-small is-left">
       <i class="fas fa-envelope"></i>
     </span>
-    <a class="button level-right is-danger is-light has-text-dark remove-message" type="button">
-      <i class="fa-regular fa-trash-can"></i>
-    </a>
   </div>
 </div>

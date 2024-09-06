@@ -12,83 +12,85 @@
     @end
 
     <div class="box">
-      {{-- Add File --}}
-      <div>
-        <div class="file has-name is-dark is-centered is-boxed is-small mb-0">
-          <label class="file-label">
-            <input class="file-input" name="files[]" type="file" id="file-input" multiple />
-            <span class="file-cta">
-              <span class="file-icon">
-                <i class="fas fa-upload"></i>
-              </span>
-              <span class="file-label"> Choose files… </span>
-            </span>
-            <span class="file-name has-text-centered" id="file-name"> No file selected </span>
-          </label>
-        </div>
-        <p id="file-error" class="has-text-danger has-text-centered"></p>
-        <div id="file-list" class="has-text-centered"></div>
+      {{-- Files --}}
+      <div class="file-container mb-4">
+        @component('pages/templates/uploads', {
+        fileDescription: 'Upload file',
+        fieldName: 'files',
+        id: 'file-input',
+        icon: 'fas fa-upload',
+        label: 'Upload a file...',
+        nameField: 'file-name',
+        nameText: 'No file selected',
+        })
+        @end
       </div>
-      <div class="divider my-2">OR</div>
 
-      {{-- Capture a video message --}}
-      <div>
-        <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
-          <label class="file-label">
-            <input class="file-input" name="videos[]" type="file" accept="video/*" id="video-input" multiple />
-            <span class="file-cta">
-              <span class="file-icon">
-                <i class="fas fa-video"></i>
-              </span>
-              <span class="file-label has-text-centered">Capture or upload <br> video message</span>
-            </span>
-            <span class="file-name has-text-centered" id="video-name"> No video selected </span>
-          </label>
-        </div>
-        <p id="video-error" class="has-text-danger has-text-centered"></p>
-        <div id="video-list" class="has-text-centered"></div>
+      {{-- Images --}}
+      @if(template.photos_max > 0)
+      <div class="image-container mb-4">
+        @component('pages/templates/uploads', {
+        fileDescription: 'Upload image',
+        fieldName: 'images',
+        accept: 'image/*',
+        id: 'image-input',
+        icon: 'fas fa-image',
+        label: 'Capture or upload image...',
+        nameField: 'image-name',
+        nameText: 'No image selected',
+        isMultiple: true,
+        })
+        @end
       </div>
-      <div class="divider my-2">OR</div>
+      @end
 
-      <div>
-        {{-- Capture or Upload an Audio Message --}}
-        <div class="file has-name is-centered is-dark is-boxed is-small mb-2">
-          <label class="file-label">
-            <input class="file-input" name="audios[]" type="file" accept="audio/*" id="audio-input" multiple />
-            <span class="file-cta">
-              <span class="file-icon">
-                <i class="fas fa-microphone"></i>
-              </span>
-              <span class="file-label">Capture or Upload <br> audio message</span>
-            </span>
-            <span class="file-name has-text-centered" id="audio-name"> No audio selected </span>
-          </label>
-        </div>
-        <p id="audio-error" class="has-text-danger has-text-centered"></p>
-        <div id="audio-list" class="has-text-centered"></div>
+      {{-- Video messages --}}
+      @each(video in templateVideo)
+      <div class="video-container mb-4">
+        @component('pages/templates/uploads', {
+        fileDescription: 'Upload video',
+        fieldName: `videos-${video.index}`,
+        accept: 'video/*',
+        id: `video-input-${video.index}`,
+        icon: 'fas fa-video',
+        label: 'Capture or upload video...',
+        nameField: `video-name-${video.index}`,
+        nameText: 'No video selected',
+        isRequired: video.isRequired
+        })
+        @end
       </div>
-      <div class="divider my-2">OR</div>
+      @end
+
+      {{-- Audio Messages --}}
+      @each(audio in templateAudio)
+      <div class="audio-container mb-4">
+        @component('pages/templates/uploads', {
+        fileDescription: 'Upload audio',
+        fieldName: `audios-${audio.index}`,
+        accept: 'audio/*',
+        id: `audio-input-${audio.index}`,
+        icon: 'fas fa-microphone',
+        label: 'Record or upload audio...',
+        nameField: `audio-name-${audio.index}`,
+        nameText: 'No audio selected',
+        isRequired: audio.isRequired
+        })
+        @end
+      </div>
+      @end
 
       {{-- Message Boxes --}}
-      <div>
-        <div id="message-container">
-          @if(messages && messages.length > 0)
-          @each(message in messages)
-          @component('pages/templates/messageBox', {message: message})
-          @end
-          @end
-          @else
-          @component('pages/templates/messageBox')
-          @end
-          @end
-        </div>
-        <div class="level is-mobile">
-          <div class="level-left"></div>
-          <div class="level-right">
-            <a class="button is-light is-info is-small has-text-dark" id="add-message" type="button">Add Message</a>
-          </div>
-        </div>
+      @each(isMessage in templateMessage)
+      <div class="message-container mb-3">
+        @component('pages/templates/messageBox', {
+        messageDescription: 'Enter message',
+        message: message,
+        isRequired: isMessage.isRequired
+        })
+        @end
       </div>
+      @end
 
       {{-- Buttons --}}
       <div class="field is-grouped">
@@ -103,136 +105,43 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const maxFiles = 5;
-    const maxVideos = 5;
-    const maxAudios = 5;
+  document.addEventListener('DOMContentLoaded', function () {
 
-    // Handle Files
-    function handleFiles() {
-      const fileInput = document.getElementById('file-input');
-      const fileNameSpan = document.getElementById('file-name');
-      const fileError = document.getElementById('file-error');
-      const fileList = document.getElementById('file-list');
-      const files = fileInput.files;
+    // handle image input
+    const minPhotos = parseInt('{{ template.photos_min }}', 10);
+    const maxPhotos = parseInt('{{ template.photos_max }}', 10);
 
-      if (files.length > maxFiles) {
-        fileInput.value = '';
-        fileError.textContent = `You can only select up to ${maxFiles} files`;
-        fileNameSpan.textContent = 'No file selected';
-        fileList.innerHTML = '';
-        setTimeout(() => {
-          fileError.textContent = '';
-          fileNameSpan.textContent = 'No file selected';
-        }, 3000);
-        return;
-      }
+    if (maxPhotos > 0) {
+      const inputElement = document.getElementById('image-input');
+      const imageName = document.getElementById('image-name')
 
-      fileError.textContent = '';
-      const fileNames = Array.from(files).map(file => file.name).join(', ');
-      fileNameSpan.textContent = fileNames;
+      inputElement.addEventListener('change', function (event) {
+        const files = event.target.files;
 
-      fileList.innerHTML = '';
-      Array.from(files).forEach(file => {
-        const fileNameElement = document.createElement('div');
-        fileNameElement.textContent = file.name;
-        fileList.appendChild(fileNameElement);
-      });
-    }
-
-    // Handle Videos
-    function handleVideos() {
-      const videoInput = document.getElementById('video-input');
-      const videoNamesSpan = document.getElementById('video-name');
-      const videoError = document.getElementById('video-error');
-      const videoList = document.getElementById('video-list')
-      const videos = videoInput.files;
-
-      if (videos.length > maxVideos) {
-        videoInput.value = ''; // Clear input
-        videoError.textContent = `You can only select up to ${maxVideos} videos`;
-        videoNamesSpan.textContent = 'No video selected';
-        setTimeout(() => {
-          videoError.textContent = '';
-          videoNamesSpan.innerHTML = 'No video selected'
-        }, 3000)
-        return;
-      }
-
-      videoError.textContent = '';
-      const videoNames = Array.from(videos).map(video => video.name).join(', ');
-      videoNamesSpan.textContent = videoNames;
-
-      videoList.innerHTML = '';
-      Array.from(videos).forEach(video => {
-        const videoNameElement = document.createElement('div');
-        videoNameElement.textContent = video.name;
-        videoList.appendChild(videoNameElement);
-      });
-    }
-
-    // Handle Audios
-    function handleAudios() {
-      const audioInput = document.getElementById('audio-input');
-      const audioNamesSpan = document.getElementById('audio-name');
-      const audioError = document.getElementById('audio-error');
-      const audioList = document.getElementById('audio-list');
-      const audios = audioInput.files;
-
-      if (audios.length > maxAudios) {
-        audioInput.value = ''; // Clear input
-        audioError.textContent = `You can only select up to ${maxAudios} audios`;
-        audioNamesSpan.textContent = 'No audio selected';
-        setTimeout(() => {
-          audioError.textContent = '';
-          audioNamesSpan.textContent = 'No audio selected';
-        }, 3000);
-        return;
-      }
-
-      audioError.textContent = '';
-      const audioNames = Array.from(audios).map(audio => audio.name).join(', ');
-      audioNamesSpan.textContent = audioNames;
-
-      audioList.innerHTML = '';
-      Array.from(audios).forEach(audio => {
-        const audioNameElement = document.createElement('div');
-        audioNameElement.textContent = audio.name;
-        audioList.appendChild(audioNameElement);
-      });
-    }
-
-    // Handle Message Boxes
-    function addMessageBox() {
-      const messageContainer = document.getElementById('message-container');
-      const messageBoxes = messageContainer.getElementsByClassName('message-box');
-      if (messageBoxes.length < 5) {
-        const newMessageBox = `
-          @component('pages/templates/messageBox')
-          @end
-        `;
-        messageContainer.insertAdjacentHTML('beforeend', newMessageBox);
-      } else {
-        alert("You can add a maximum of 5 messages.");
-      }
-    }
-
-    function removeMessageBox(event) {
-      if (event.target.classList.contains('remove-message')) {
-        const messageBox = event.target.closest('.message-box');
-        if (document.getElementsByClassName('message-box').length > 1) {
-          messageBox.remove();
-        } else {
-          alert("You need to have at least one message box.");
+        if (files.length < minPhotos) {
+          inputElement.value = '';
+          alert(`You need to upload at least ${minPhotos} images.`);
         }
-      }
-    }
 
-    document.getElementById('file-input').addEventListener('change', handleFiles);
-    document.getElementById('video-input').addEventListener('change', handleVideos);
-    document.getElementById('audio-input').addEventListener('change', handleAudios);
-    document.getElementById('add-message').addEventListener('click', addMessageBox);
-    document.getElementById('message-container').addEventListener('click', removeMessageBox);
+        if (files.length > maxPhotos) {
+          inputElement.value = '';
+          imageName.textContent = 'No image selected'
+          alert(`You can only upload a maximum of ${maxPhotos} images.`);
+        }
+      });
+    }
   });
+
+  function displayFileNames(inputId, nameFieldId) {
+    const fileInput = document.getElementById(inputId);
+    const fileNameField = document.getElementById(nameFieldId);
+
+    if (fileInput.files.length > 0) {
+      const fileNames = Array.from(fileInput.files).map(file => file.name).join(', ');
+      fileNameField.textContent = fileNames;
+    } else {
+      fileNameField.textContent = 'No file selected';
+    }
+  }
 </script>
 @end

@@ -3,7 +3,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class GraphicsMediaOperator extends BaseModel {
   static connection = 'console'
-  
+
   @column({ isPrimary: true })
   declare id: number
 

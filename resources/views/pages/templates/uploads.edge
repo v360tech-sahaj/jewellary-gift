@@ -1,0 +1,22 @@
+<div class="is-size-6 has-text-weight-medium is-capitalized">{{ fileDescription || '' }}
+  @if(isRequired)
+  <span class="has-text-danger">*</span>
+  @else
+  <span class="is-size-7 has-text-weight-normal">(Optional)</span>
+  @end
+</div>
+
+<div class="file has-name is-dark is-fullwidth is-small mb-1">
+  <label class="file-label">
+    <input class="file-input" name="{{ fieldName }}{{ isMultiple ? '[]' : '' }}" type="file" accept="{{ accept || '' }}"
+      id="{{ id }}" onchange="displayFileNames('{{ id }}', '{{ nameField }}')" {{ isRequired ? 'required' : '' }} {{
+      isMultiple ? 'multiple' : '' }} />
+    <span class="file-cta">
+      <span class="file-icon">
+        <i class="{{ icon }}"></i>
+      </span>
+      <span class="file-label has-text-centered"> {{ label }} </span>
+    </span>
+    <span class="file-name has-text-centered" id="{{ nameField }}"> {{ nameText }} </span>
+  </label>
+</div>

@@ -1,39 +1,5 @@
 @component('layouts/main')
 
-<style>
-  input[type="radio"] {
-    position: absolute;
-  }
-
-  label {
-    height: 100%;
-    display: block;
-    background: white;
-    border-radius: 20px;
-    padding: 1rem;
-    text-align: center;
-    position: relative;
-  }
-
-  input[type="radio"]:checked+label {
-    &::after {
-      color: black;
-      font-family: FontAwesome;
-      border: 2px solid black;
-      content: "\f00c";
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 30px;
-      width: 30px;
-      line-height: 28px;
-      border-radius: 50%;
-      background: #cccccc;
-    }
-  }
-</style>
-
 <div class="container">
   <p class="is-size-4 has-text-centered has-text-weight-bold">Gift Jewellary to loved one</p>
   <form method="post" action="{{ route('templates.store', { gsId }) }}">
@@ -48,24 +14,118 @@
 
     {{-- Templates --}}
     <div class="box">
-      <div class="grid has-text-centered mb-0">
-        @each(t in templates)
-        <div class="cell mb-3">
-          @component('components/imageRadio', { template : t, templateId : templateId })
+      @let(hasTemplate = false)
+      @if(giftTemplates && giftTemplates.length > 0)
+        @each(category in giftTemplates)
+          @if(category.templates && category.templates.length > 0)
+            @assign(hasTemplate = true)
+            <h3 class="is-size-5 is-capitalize has-text-weight-semibold">{{ category.name }}</h3>
+            <div class="fixed-grid has-6-cols-desktop has-3-cols-tablet has-2-cols-mobile mb-3">
+              <div class="grid has-text-centered mb-0">
+                @each(templates in category.templates)
+                <div class="cell">
+                  @component('components/imageRadio', {
+                  template: templates,
+                  templateId: details.templateId,
+                  })
+                  @end
+                </div>
+                @end
+              </div>
+            </div>
           @end
-        </div>
         @end
-      </div>
+      @end
+
+      @if(!hasTemplate)
+      <p class="has-text-centered">No data available.</p>
+      @end
 
       {{-- Buttons --}}
       <div class="field is-grouped">
         <div class="control">
           <a href="{{ route('assets.create', {gsId}) }}" class="button is-small is-light" type="button">Previous</a>
-          <button class="button is-small is-dark has-text-warning" type="submit">Next</button>
+          <button id="nextBtn" class="button is-small is-dark has-text-warning" type="submit">Next</button>
         </div>
       </div>
 
     </div>
   </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      function openUrl(url) {
+        window.open(url, '_blank');
+      }
+
+      const hasTemplate = {{ hasTemplate ? 'true' : 'false' }};
+      const nextBtn = document.getElementById('nextBtn')
+      if(!hasTemplate){
+        nextBtn.disabled = true
+      }
+
+      function selectTemplate() {
+        (document.querySelectorAll('.js-view-button') || []).forEach(button => {
+          button.addEventListener('click', () => {
+            const url = button.dataset.url;
+            openUrl(url);
+          });
+        });
+
+        (document.querySelectorAll('.js-select-button') || []).forEach(button => {
+          button.addEventListener('click', () => {
+            const templateId = button.dataset.templateId;
+
+            // Update radio button selection
+            const radioButton = document.querySelector(`input[name="templateId"][value="${templateId}"]`);
+            if (radioButton) {
+              radioButton.checked = true;
+            }
+
+            // Update button states
+            updateButtonStates(button);
+          });
+        });
+      }
+
+      // Set the initially selected template
+      function setSelectedTemplate() {
+        const selectedTemplateId = '{{ details.templateId }}';
+
+        if (selectedTemplateId) {
+          const radioButton = document.querySelector(`input[name="templateId"][value="${selectedTemplateId}"]`);
+          if (radioButton) {
+            radioButton.checked = true;
+          }
+
+          const selectedButton = document.querySelector(`.js-select-button[data-template-id="${selectedTemplateId}"]`);
+          if (selectedButton) {
+            updateButtonStates(selectedButton);
+          }
+        }
+      }
+
+      // Update button states
+      function updateButtonStates(selectedButton) {
+        document.querySelectorAll('.js-select-button').forEach(button => {
+          if (button === selectedButton) {
+            button.textContent = 'Selected';
+            button.classList.remove('is-primary');
+            button.classList.add('is-dark', 'is-selected');
+          } else {
+            button.textContent = 'Select';
+            button.classList.remove('is-dark', 'is-selected');
+            button.classList.add('is-primary');
+          }
+        });
+      }
+
+      const selectedTemplateId = '{{ details.templateId }}';
+      if (selectedTemplateId) {
+        setSelectedTemplate();
+      }
+      selectTemplate();
+    });
+  </script>
 </div>
 @end

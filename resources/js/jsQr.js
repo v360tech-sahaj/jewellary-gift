@@ -52,9 +52,9 @@ docReady(function () {
               <span class="icon is-small is-left">
                 <i class="fas fa-pen"></i>
               </span>
-              <a class="button is-danger is-light has-text-dark" type="button" onclick="removeAssetBox(this)">
+              <button class="button is-danger is-light has-text-dark" type="button" onclick="removeAssetBox(this)">
                 <i class="fa-regular fa-trash-can"></i>
-              </a>
+              </button>
             </div>
           </div>
         `;

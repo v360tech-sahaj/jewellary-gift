@@ -21,11 +21,11 @@ const dbConfig = defineConfig({
     console: {
       client: 'mysql2',
       connection: {
-        host: 'ec2-13-235-48-14.ap-south-1.compute.amazonaws.com',
-        port: 3306,
-        user: 'alpha-app',
-        password: 'Alpha@1234',
-        database: 'console',
+        host: env.get('CONSOLE_DB_HOST'),
+        port: env.get('DB_PORT'),
+        user: env.get('CONSOLE_DB_USER'),
+        password: env.get('CONSOLE_DB_PASSWORD'),
+        database: env.get('CONSOLE_DB_DATABASE'),
       },
     },
   },

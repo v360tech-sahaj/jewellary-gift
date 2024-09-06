@@ -7,7 +7,6 @@ export default class CheckoutsController {
     const gsId = request.param('gsId')
     let details = session.get(gsId)
 
-    // console.log('data at checkout index', session.get(gsId))
     return view.render('pages/summary', { details, gsId })
   }
 
@@ -22,6 +21,15 @@ export default class CheckoutsController {
         for (const file of details.files) {
           const { filePath, clientName } = file
           // Upload file to server
+          await S3Service.uploadToS3(clientName, filePath)
+          await fs.unlink(filePath)
+        }
+      }
+
+      if (details.images && Array.isArray(details.images)) {
+        for (const image of details.images) {
+          const { filePath, clientName } = image
+          // Upload image to server
           await S3Service.uploadToS3(clientName, filePath)
           await fs.unlink(filePath)
         }

@@ -1,80 +1,20 @@
-<div>
+<div class="mb-1">
   {{-- Template Preview --}}
-  <div class="card mb-0">
-    <input type="radio" id="{{ template.label }}" name="templateId" value="{{ template.value }}" {{
-      template===templateId ? 'checked' : '' }} required>
-    <label for="{{ template.label }}" class="mb-0 p-1">
+  <div class="card mb-1">
+    <input type="radio" class="sr-only" id="{{ template.id }}" name="templateId" value="{{ template.id }}" {{
+      templateId===template.id ? 'checked' : '' }} required>
+    <label for="{{ template.id }}" class="mb-0 p-1">
       <div class="card-image">
         <figure class="image is-4by3">
-          <img src="{{ template.img }}" alt="{{ template.placeholder }}" />
+          <img src="{{template.publicUrl}}" alt="{{ template.name }}" />
         </figure>
       </div>
     </label>
-    <div class="card-content p-1">
-      <div class="content js-modal-trigger has-text-centered" data-target="{{ template.id }}">View</div>
-    </div>
   </div>
-
-  {{-- Modal --}}
-  <div id="{{ template.id }}" class="modal px-3">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head p-3 mb-0 level is-mobile has-background-grey-lighter">
-        <p class="modal-card-title level-left">{{ template.placeholder }}</p>
-        <button type="button" class="delete level-right" aria-label="close"></button>
-      </header>
-      <section class="modal-card-body py-0 px-3 my-auto has-background-grey-lighter">
-        <video id="video-{{ template.id }}" controls style="width: 100%; height: auto;">
-          <source src="{{ template.video }}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </section>
-      <footer class="modal-card-foot p-2 mt-0 has-background-grey-lighter"></footer>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      function openModal($el) {
-        $el.classList.add('is-active')
-      }
-
-      function closeModal($el) {
-        $el.classList.remove('is-active')
-      }
-
-      (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-        const modal = $trigger.dataset.target;
-        const $target = document.getElementById(modal);
-
-        $trigger.addEventListener('click', () => {
-          openModal($target);
-          const video = document.getElementById(`video-${modal}`);
-          video.play();
-        });
-      });
-
-      (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-        const $target = $close.closest('.modal');
-
-        $close.addEventListener('click', () => {
-          closeModal($target);
-          const video = $target.querySelector('video');
-          video.pause();
-          video.currentTime = 0;
-        });
-      });
-
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-          (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-            closeModal($modal);
-            const video = $modal.querySelector('video');
-            video.pause();
-            video.currentTime = 0;
-          });
-        }
-      });
-    });
-  </script>
+  <button class="button is-small is-link is-light is-fullwidth js-view-button has-text-centered mb-1" type="button"
+    data-url="{{template.preview}}">Preview</button>
+  <button class="button is-small is-primary js-select-button is-fullwidth" type="button"
+    data-template-id="{{ template.id }}">
+    Select
+  </button>
 </div>

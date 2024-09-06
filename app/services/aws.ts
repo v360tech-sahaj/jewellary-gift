@@ -1,6 +1,7 @@
 import fs from 'fs/promises'
 import * as AWS from '@aws-sdk/client-s3'
 import { fromEnv } from '@aws-sdk/credential-provider-env'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 const s3Client = new AWS.S3Client({
   region: process.env.AWS_REGION,
@@ -14,7 +15,7 @@ export default class S3Service {
 
       await s3Client.send(
         new AWS.PutObjectCommand({
-          Bucket: process.env.S3_BUCKET,
+          Bucket: 'v360-test',
           Key: fileName,
           Body: file,
         })
@@ -22,6 +23,21 @@ export default class S3Service {
       console.log(`${fileName} Uploaded to S3`)
     } catch (error) {
       console.log('Failed to upload to S3', error)
+    }
+  }
+
+  public static async getPublicUrl(filePath: string): Promise<string | null> {
+    try {
+      const command = new AWS.GetObjectCommand({
+        Bucket: process.env.S3_BUCKET,
+        Key: filePath,
+      })
+
+      const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 15 })
+      return url
+    } catch (error) {
+      console.error('Failed to generate public URL', error)
+      return null
     }
   }
 }

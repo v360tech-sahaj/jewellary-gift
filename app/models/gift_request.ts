@@ -42,21 +42,6 @@ export default class GiftRequest extends BaseModel {
   declare resolution: 'Widescreen' | 'Square' | 'Vertical'
 
   @column()
-  declare request_videos: JSON | null
-
-  @column()
-  declare request_audios: JSON | null
-
-  @column()
-  declare request_photos: JSON | null
-
-  @column()
-  declare request_messages: JSON | null
-
-  @column()
-  declare request_doc: string | null
-
-  @column()
   declare assigned_to: number | null
 
   @column.dateTime()
