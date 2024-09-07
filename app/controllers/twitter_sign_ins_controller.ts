@@ -2,26 +2,26 @@ import { HttpContext } from '@adonisjs/core/http'
 import { ulid } from 'ulid'
 import Consumer from '#models/consumer'
 
-export default class GoogleSignInsController {
+export default class TwitterSignInsController {
   public async redirect({ ally }: HttpContext) {
-    return ally.use('google').redirect()
+    return ally.use('twitter').redirect()
   }
 
   public async handleCallback({ ally, auth, response }: HttpContext) {
-    const googleUser = ally.use('google')
+    const twitterUser = ally.use('twitter')
 
     // Unable to verify the CSRF state
-    if (googleUser.stateMisMatch()) {
+    if (twitterUser.stateMisMatch()) {
       return 'Request expired. try again'
     }
 
     // There was an unknown error during the redirect
-    if (googleUser.hasError()) {
-      return googleUser.getError()
+    if (twitterUser.hasError()) {
+      return twitterUser.getError()
     }
 
     // Finally, access the user
-    const user = await googleUser.user()
+    const user = await twitterUser.user()
 
     const code = ulid()
 
@@ -29,7 +29,7 @@ export default class GoogleSignInsController {
       name: user.name as string,
       email: user.email as string,
       provider_id: user.id as string,
-      provider_type: 'Google' as 'Google',
+      provider_type: 'Twitter' as 'Twitter',
       provider_avatar: user.avatarUrl as string,
       code: code,
       phone: '',

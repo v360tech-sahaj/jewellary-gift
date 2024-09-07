@@ -5,7 +5,12 @@ const allyConfig = defineConfig({
   google: services.google({
     clientId: env.get('GOOGLE_CLIENT_ID'),
     clientSecret: env.get('GOOGLE_CLIENT_SECRET'),
-    callbackUrl: 'http://localhost:3333/',
+    callbackUrl: 'http://localhost:3333/google/sign-in/callback',
+  }),
+  twitter: services.twitter({
+    clientId: env.get('TWITTER_CLIENT_ID')!,
+    clientSecret: env.get('TWITTER_CLIENT_SECRET')!,
+    callbackUrl: 'http://localhost:3333/twitter/sign-in/callback',
   }),
 })
 

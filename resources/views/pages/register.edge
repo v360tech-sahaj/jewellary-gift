@@ -1,0 +1,92 @@
+@component('layouts/main')
+<div class="container">
+  <form method="POST" action="{{ route('register.store') }}">
+    {{ csrfField() }}
+    <section class=" section has-background-light" style="height: 100vh;">
+      <div class="columns is-vcentered is-centered" style="height: 100%;">
+        <div class="column is-6 mb-8">
+          <div class="title is-2 mb-0">Welcome!</div>
+          <p class="is-size-5 has-text-grey-dark">Jewellery Gifting</p>
+        </div>
+        <div class="column is-5">
+          <div class="box has-background-white has-text-centered">
+            <h3 class="title is-4 mt-4 mb-3">Register</h3>
+            {{-- Sign in credentials --}}
+            <div class="mb-2">
+              <div class="control has-icons-left mb-1">
+                <input class="input" name="name" type="text" placeholder="Enter your name">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-user"></i>
+                </span>
+              </div>
+
+              <div class="control has-icons-left mb-1">
+                <input class="input" name="phone" type="number" placeholder="Enter 10 digit phone number">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-phone"></i>
+                </span>
+
+                {{-- for unique validation --}}
+                @flashMessage('phoneError')
+                <div class="notification {{ $message.type }} p-1">
+                  <small class="has-text-danger"> {{ $message.message }} </small>
+                </div>
+                @end
+
+                @inputError('phone')
+                @each(message in $messages)
+                <small class="has-text-danger"> {{ message }} </small>
+                @end
+                @end
+              </div>
+
+              <div class="control has-icons-left mb-1">
+                <input class="input" name="email" type="email" placeholder="anything@email.com">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-envelope"></i>
+                </span>
+
+                {{-- for unique validation --}}
+                @flashMessage('emailError')
+                <div class="notification {{ $message.type }} p-1">
+                  <small class="has-text-danger"> {{ $message.message }} </small>
+                </div>
+                @end
+
+                @inputError('email')
+                @each(message in $messages)
+                <small class="has-text-danger"> {{ message }} </small>
+                @end
+                @end
+              </div>
+
+              <div class="control has-icons-left mb-1">
+                <input type="password" name="password" placeholder="Password" class="input">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+              </div>
+
+              <div class="control has-icons-left">
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" class="input">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+
+                @inputError('password')
+                @each(message in $messages)
+                <small class="has-text-danger"> {{ message }} </small>
+                @end
+                @end
+              </div>
+            </div>
+            <button type="submit" class="button is-dark is-fullwidth">Register</button>
+            <p class="has-text-centered">Already have an account? <a href="{{ route('login')}}"
+                class="has-text-weight-semibold has-text-dark">Sign in</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </form>
+</div>
+@end

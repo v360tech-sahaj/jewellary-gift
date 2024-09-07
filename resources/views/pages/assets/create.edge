@@ -100,11 +100,9 @@
       if (emptyAssetBox) {
         // Found an empty asset box, directly set the value
         emptyAssetBox.value = decodedText;
-        console.log(`Scan result "${decodedText}" set in existing asset box.`);
       } else if (emptyAssetBox == null) {
         // No empty asset box found, add a new assetBox
         addAssetBox(decodedText);
-        console.log(`Scan result "${decodedText}" added as a new asset box.`);
       }
     }
 

@@ -1,6 +1,6 @@
 @component('layouts/main')
 <div class="container">
-  <form action="{{ route('home') }}">
+  <form method="POST" action="{{ route('login.store') }}">
     {{ csrfField() }}
     <section class=" section has-background-light" style="height: 100vh;">
       <div class="columns is-vcentered is-centered" style="height: 100%;">
@@ -16,19 +16,27 @@
               {{-- Sign in credentials --}}
               <div class="mb-2">
                 <div class="control has-icons-left mb-1">
-                  <input class="input" type="email" placeholder="anything@email.com" required>
+                  <input class="input" name="email" id="email" type="email" placeholder="anything@email.com"
+                    value="test@email.com" required>
                   <span class="icon is-small is-left">
                     <i class="fa fa-envelope"></i>
                   </span>
                 </div>
+
                 <div class="control has-icons-left">
-                  <input type="password" placeholder="Password" class="input" required>
+                  <input type="password" name="password" placeholder="Password" class="input" value="123456" required>
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
+                  @flashMessage('notification')
+                  <div class="notification {{ $message.type }} p-1">
+                    <small class="has-text-danger"> {{ $message.message }} </small>
+                  </div>
+                  @end
                 </div>
               </div>
               <button type="submit" class="button is-dark is-fullwidth">Login</button>
+              <small><a href="{{ route('register') }}">Register</a></small><br>
               <small><a href="#">Forgot password</a></small>
 
               <div class="divider my-2">OR</div>
@@ -46,7 +54,7 @@
 
                 {{-- Twitter Sign in --}}
                 <div class="control">
-                  <a class="button is-info is-fullwidth mb-2" href="#">
+                  <a class="button is-info is-fullwidth mb-2" href="{{ route('/twitter/sign-in') }}" disabled>
                     <span class="icon">
                       <i class="fa-brands fa-twitter"></i>
                     </span>
