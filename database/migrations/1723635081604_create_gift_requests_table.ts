@@ -25,6 +25,7 @@ export default class extends BaseSchema {
         .inTable('gift_templates')
         .onUpdate('cascade')
         .onDelete('restrict')
+      table.integer('graphics_asset_id').nullable()
       table.enum('status', ['REQUESTED', 'PROCESS', 'PROCESSED', 'READY', 'ERROR']).notNullable()
       table.string('note', 256).nullable()
       table.enum('resolution', ['W', 'S', 'V']).defaultTo('W')
