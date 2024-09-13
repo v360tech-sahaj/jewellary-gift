@@ -41,5 +41,8 @@ router.group(() => {
     .as('templates.detail.store')
 
   router.get('checkout/:gsId', [CheckoutsController, 'index']).as('checkout.index')
-  router.post('checkout/:gsId', [CheckoutsController, 'store']).as('checkout.store')
+  router
+    .post('checkout/:gsId', [CheckoutsController, 'store'])
+    .as('checkout.store')
+    .use(middleware.auth())
 })

@@ -7,6 +7,7 @@ import Retailer from './retailer.js'
 import Consumer from './consumer.js'
 import GraphicsAsset from './graphics_asset.js'
 import GraphicsMediaOperator from './graphics_media_operator.js'
+import db from '@adonisjs/lucid/services/db'
 
 export default class GiftRequest extends BaseModel {
   static connection = 'mysql'
@@ -15,7 +16,7 @@ export default class GiftRequest extends BaseModel {
   declare id: number
 
   @column({ isPrimary: false })
-  declare code: number
+  declare code: string
 
   @column()
   declare retailer_id: number | null
@@ -91,4 +92,22 @@ export default class GiftRequest extends BaseModel {
 
   @belongsTo(() => GraphicsMediaOperator, { foreignKey: 'assigned_to' })
   declare assignedTo: BelongsTo<typeof GraphicsMediaOperator>
+
+  static async add(payload: any) {
+    try {
+      await db.transaction(async () => {
+        const data = {
+          ...payload,
+          status: 'REQUESTED',
+        }
+
+        const request = new GiftRequest()
+
+        request.fill(data)
+        await request.save()
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
 }

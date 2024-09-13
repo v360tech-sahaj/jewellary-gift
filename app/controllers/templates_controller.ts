@@ -6,6 +6,9 @@ import GiftTemplateAudio from '#models/gift_template_audio'
 import GiftTemplateMessage from '#models/gift_template_message'
 import GiftTemplateVideo from '#models/gift_template_video'
 import S3Service from '#services/aws'
+import GiftAudioRecording from '#models/gift_audio_recording'
+import GiftVideoMessage from '#models/gift_video_message'
+import GiftTextMessage from '#models/gift_text_message'
 
 export default class TemplatesController {
   public async index({ request, view, session }: HttpContext) {
@@ -84,6 +87,7 @@ export default class TemplatesController {
     // Get detail from session
     const details = session.get(gsId)
     const templateId = details.templateId
+    const template = await GiftTemplate.find(templateId)
 
     const messages = details.messages
     const files = details.files
@@ -91,35 +95,53 @@ export default class TemplatesController {
     const videos = details.videos
     const audios = details.audios
 
-    // get details of message associated with template
-    const templateMessage = await GiftTemplateMessage.query().withScopes((scopes) =>
-      scopes.ofMessage(templateId)
+    const [templateMessages, templateAudios, templateVideos] = await Promise.all([
+      GiftTemplateMessage.query()
+        .withScopes((scopes) => scopes.ofMessage(templateId))
+        .exec(),
+      GiftTemplateAudio.query()
+        .withScopes((scopes) => scopes.ofAudio(templateId))
+        .exec(),
+      GiftTemplateVideo.query()
+        .withScopes((scopes) => scopes.ofVideo(templateId))
+        .exec(),
+    ])
+    const messageIds = Array.from(
+      new Set(templateMessages.map((message) => message.text_message_id))
     )
-    const simplyfyMessage = templateMessage.map((message) => ({
+    const [textMessages, audioRecordings, videoMessages] = await Promise.all([
+      GiftTextMessage.query().whereIn('id', messageIds).exec(),
+      GiftAudioRecording.query()
+        .whereIn('id', Array.from(new Set(templateAudios.map((audio) => audio.audio_id))))
+        .exec(),
+      GiftVideoMessage.query()
+        .whereIn('id', Array.from(new Set(templateVideos.map((video) => video.video_id))))
+        .exec(),
+    ])
+
+    const messagesMap = new Map(textMessages.map((message) => [message.id, message]))
+    const audioMap = new Map(audioRecordings.map((recording) => [recording.id, recording]))
+    const videoMap = new Map(videoMessages.map((video) => [video.id, video]))
+
+    const enhancedMessageData = templateMessages.map((message) => ({
       ...message.toJSON(),
+      code: messagesMap.get(message.text_message_id)?.code ?? null,
+      title: messagesMap.get(message.text_message_id)?.title ?? null,
     }))
 
-    // get details of audio associated with template
-    const templateAudio = await GiftTemplateAudio.query().withScopes((scopes) =>
-      scopes.ofAudio(templateId)
-    )
-    // add index field in audio for component naming
-    const templateAudioWithIndex = templateAudio.map((audio, index) => ({
+    const enhancedAudioData = templateAudios.map((audio, index) => ({
       ...audio.toJSON(),
       index,
+      code: audioMap.get(audio.audio_id)?.code ?? null,
+      title: audioMap.get(audio.audio_id)?.title ?? null,
     }))
 
-    // get details of video associated with template
-    const templateVideo = await GiftTemplateVideo.query().withScopes((scopes) =>
-      scopes.ofVideo(templateId)
-    )
-    // add index field in video for component naming
-    const templateVideoWithIndex = templateVideo.map((video, index) => ({
+    const enhancedVideoData = templateVideos.map((video, index) => ({
       ...video.toJSON(),
       index,
+      code: videoMap.get(video.video_id)?.code ?? null,
+      title: videoMap.get(video.video_id)?.title ?? null,
     }))
-
-    const template = await GiftTemplate.find(templateId)
 
     return view.render('pages/templates/detail', {
       gsId,
@@ -129,9 +151,9 @@ export default class TemplatesController {
       videos,
       audios,
       template,
-      templateMessage: simplyfyMessage,
-      templateAudio: templateAudioWithIndex,
-      templateVideo: templateVideoWithIndex,
+      templateMessage: enhancedMessageData,
+      templateAudio: enhancedAudioData,
+      templateVideo: enhancedVideoData,
     })
   }
 
@@ -148,7 +170,17 @@ export default class TemplatesController {
     // Handle files
     const files = request.files('files')
     if (files.length > 0) {
-      await Promise.all(files.map((file) => file.move(uploadPath)))
+      await Promise.all(
+        files.map(async (file) => {
+          try {
+            await file.move(uploadPath)
+
+            console.log(`File successfully moved to ${uploadPath}/${file.clientName}`)
+          } catch (error) {
+            console.error('Error moving file', error)
+          }
+        })
+      )
     }
 
     // Handle images
@@ -157,7 +189,17 @@ export default class TemplatesController {
       extnames: ['jpeg', 'jpg', 'png', 'webp'],
     })
     if (images.length > 0) {
-      await Promise.all(images.map((image) => image.move(uploadPath)))
+      await Promise.all(
+        images.map(async (image) => {
+          try {
+            await image.move(uploadPath)
+
+            console.log(`Image successfully moved to ${uploadPath}/${image.clientName}`)
+          } catch (error) {
+            console.error('Error moving image', error)
+          }
+        })
+      )
     }
 
     // Handle videos
@@ -169,6 +211,24 @@ export default class TemplatesController {
       index,
     }))
 
+    const videoIds = templateVideoWithIndex.map((video: any) => video.videoId)
+    const videoMessages = await GiftVideoMessage.query()
+      .select('id', 'code')
+      .whereIn('id', videoIds)
+      .exec()
+
+    const videoCodesMap = new Map(videoMessages.map((video) => [video.id, video.code]))
+
+    const enhancedVideoData = templateVideoWithIndex.map((video: any) => {
+      const code = videoCodesMap.get(video.videoId)
+
+      return {
+        ...video,
+        code,
+      }
+    })
+
+    const videoCodes = new Map(enhancedVideoData.map((video) => [video.index, video.code]))
     const videos: any[] = []
     for (let i = 0; i < templateVideoWithIndex.length; i++) {
       const fieldName = `videos-${i}`
@@ -178,7 +238,22 @@ export default class TemplatesController {
       })
 
       if (uploadedVideos.length > 0) {
-        await Promise.all(uploadedVideos.map((video) => video.move(uploadPath)))
+        await Promise.all(
+          uploadedVideos.map(async (video) => {
+            try {
+              const code = videoCodes.get(i)
+              const fileExtension = video.extname
+              const newFileName = `${code}.${fileExtension}`
+
+              await video.move(uploadPath, {
+                name: newFileName,
+              })
+              console.log(`Video successfully moved to ${uploadPath}/${newFileName}`)
+            } catch (error) {
+              console.error(`Error moving video: ${error.message}`)
+            }
+          })
+        )
       }
       videos.push(...uploadedVideos)
     }
@@ -192,12 +267,46 @@ export default class TemplatesController {
       index,
     }))
 
+    const audioIds = templateAudioWithIndex.map((audio: any) => audio.audioId)
+    const audioMessages = await GiftAudioRecording.query()
+      .select('id', 'code')
+      .whereIn('id', audioIds)
+      .exec()
+
+    const audioCodesMap = new Map(audioMessages.map((audio) => [audio.id, audio.code]))
+    const enhancedAudioData = templateAudioWithIndex.map((audio: any) => {
+      const code = audioCodesMap.get(audio.audioId)
+
+      return {
+        ...audio,
+        code,
+      }
+    })
+
+    const audioCodes = new Map(enhancedAudioData.map((audio) => [audio.index, audio.code]))
     const audios: any[] = []
     for (let i = 0; i < templateAudioWithIndex.length; i++) {
       const fieldName = `audios-${i}`
       const uploadedAudios = request.files(fieldName)
       if (uploadedAudios.length > 0) {
-        await Promise.all(uploadedAudios.map((audio) => audio.move(uploadPath)))
+        await Promise.all(
+          uploadedAudios.map(async (audio) => {
+            try {
+              // Generate a unique file name
+              const code = audioCodes.get(i)
+              const fileExtension = audio.extname
+              const newFileName = `${code}.${fileExtension}`
+
+              // Attempt to move the file
+              await audio.move(uploadPath, {
+                name: newFileName,
+              })
+              console.log(`audio successfully moved to ${uploadPath}/${newFileName}`)
+            } catch (error) {
+              console.error(`Error moving audio: ${error.message}`)
+            }
+          })
+        )
       }
       audios.push(...uploadedAudios)
     }

@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import fs from 'fs/promises'
 import S3Service from '#services/aws'
+import GiftRequest from '#models/gift_request'
+import { ulid } from 'ulid'
 
 export default class CheckoutsController {
   public async index({ request, view, session }: HttpContext) {
@@ -10,11 +12,29 @@ export default class CheckoutsController {
     return view.render('pages/summary', { details, gsId })
   }
 
-  public async store({ request, response, session }: HttpContext) {
+  public async store({ request, response, session, auth }: HttpContext) {
     const gsId = request.param('gsId')
     const promoCode = request.input('promoCode')
 
     let details = session.get(gsId)
+
+    const user = auth.user
+    const consumerId = user ? user.id : null
+
+    const templateId = parseInt(details.templateId, 10)
+
+    if (isNaN(templateId)) {
+      console.error('Invalid Template ID:', details.templateId)
+      return response.status(400).send('Invalid Template ID')
+    }
+
+    const payload = {
+      code: ulid(),
+      consumer_id: consumerId,
+      template_id: templateId,
+    }
+
+    await GiftRequest.add(payload)
 
     try {
       if (details.files && Array.isArray(details.files)) {
@@ -37,18 +57,18 @@ export default class CheckoutsController {
 
       if (details.videos && Array.isArray(details.videos)) {
         for (const video of details.videos) {
-          const { filePath, clientName } = video
+          const { filePath, fileName } = video
           // Upload video to server
-          await S3Service.uploadToS3(clientName, filePath)
+          await S3Service.uploadToS3(fileName, filePath)
           await fs.unlink(filePath)
         }
       }
 
       if (details.audios && Array.isArray(details.audios)) {
         for (const audio of details.audios) {
-          const { filePath, clientName } = audio
+          const { filePath, fileName } = audio
           // Upload audio to server
-          await S3Service.uploadToS3(clientName, filePath)
+          await S3Service.uploadToS3(fileName, filePath)
           await fs.unlink(filePath)
         }
       }

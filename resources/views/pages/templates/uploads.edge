@@ -1,10 +1,11 @@
-<div class="is-size-6 has-text-weight-medium is-capitalized">{{ fileDescription || '' }}
+<div class="is-size-6 has-text-weight-medium">{{ fileDescription || '' }}
   @if(isRequired)
   <span class="has-text-danger">*</span>
   @else
   <span class="is-size-7 has-text-weight-normal">(Optional)</span>
   @end
 </div>
+<div class="is-size-7 has-text-weight-normal">{{extraDescription || ''}}</div>
 
 <div class="file has-name is-dark is-fullwidth is-small mb-1">
   <label class="file-label">

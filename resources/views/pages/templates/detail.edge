@@ -30,15 +30,17 @@
       @if(template.photos_max > 0)
       <div class="image-container mb-4">
         @component('pages/templates/uploads', {
-        fileDescription: 'Upload image',
+        fileDescription: 'Capture or upload image',
+        extraDescription: `(You can upload upto ${template.photos_max} photos)`,
         fieldName: 'images',
         accept: 'image/*',
         id: 'image-input',
         icon: 'fas fa-image',
-        label: 'Capture or upload image...',
+        label: 'Capture an image...',
         nameField: 'image-name',
         nameText: 'No image selected',
         isMultiple: true,
+        isRequired: template.photos_min > 0,
         })
         @end
       </div>
@@ -48,12 +50,12 @@
       @each(video in templateVideo)
       <div class="video-container mb-4">
         @component('pages/templates/uploads', {
-        fileDescription: 'Upload video',
+        fileDescription: `${video.title}`,
         fieldName: `videos-${video.index}`,
         accept: 'video/*',
         id: `video-input-${video.index}`,
         icon: 'fas fa-video',
-        label: 'Capture or upload video...',
+        label: 'Capture a video...',
         nameField: `video-name-${video.index}`,
         nameText: 'No video selected',
         isRequired: video.isRequired
@@ -66,12 +68,12 @@
       @each(audio in templateAudio)
       <div class="audio-container mb-4">
         @component('pages/templates/uploads', {
-        fileDescription: 'Upload audio',
+        fileDescription: `${audio.title}`,
         fieldName: `audios-${audio.index}`,
         accept: 'audio/*',
         id: `audio-input-${audio.index}`,
         icon: 'fas fa-microphone',
-        label: 'Record or upload audio...',
+        label: 'Record an audio...',
         nameField: `audio-name-${audio.index}`,
         nameText: 'No audio selected',
         isRequired: audio.isRequired
@@ -84,7 +86,7 @@
       @each(isMessage in templateMessage)
       <div class="message-container mb-3">
         @component('pages/templates/messageBox', {
-        messageDescription: 'Enter message',
+        messageDescription: `${isMessage.title}`,
         message: message,
         isRequired: isMessage.isRequired
         })
