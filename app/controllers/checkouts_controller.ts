@@ -21,27 +21,28 @@ export default class CheckoutsController {
     const user = auth.user
     const consumerId = user ? user.id : null
 
-    const templateId = parseInt(details.templateId, 10)
-
-    if (isNaN(templateId)) {
-      console.error('Invalid Template ID:', details.templateId)
-      return response.status(400).send('Invalid Template ID')
-    }
-
     const payload = {
       code: ulid(),
       consumer_id: consumerId,
-      template_id: templateId,
+      template_id: details.templateId,
+      requestedAsset: details.assetNumbers,
+      files: details.files,
+      images: details.images,
+      videos: details.videos,
+      audios: details.audios,
+      messages: details.messages,
     }
 
-    await GiftRequest.add(payload)
+    const requestId = await GiftRequest.add(payload)
 
     try {
       if (details.files && Array.isArray(details.files)) {
         for (const file of details.files) {
           const { filePath, clientName } = file
+          const s3Path = `gift/${requestId}/${clientName}`
+
           // Upload file to server
-          await S3Service.uploadToS3(clientName, filePath)
+          await S3Service.uploadToS3(s3Path, filePath)
           await fs.unlink(filePath)
         }
       }
@@ -49,8 +50,10 @@ export default class CheckoutsController {
       if (details.images && Array.isArray(details.images)) {
         for (const image of details.images) {
           const { filePath, clientName } = image
+          const s3Path = `gift/${requestId}/${clientName}`
+
           // Upload image to server
-          await S3Service.uploadToS3(clientName, filePath)
+          await S3Service.uploadToS3(s3Path, filePath)
           await fs.unlink(filePath)
         }
       }
@@ -58,8 +61,10 @@ export default class CheckoutsController {
       if (details.videos && Array.isArray(details.videos)) {
         for (const video of details.videos) {
           const { filePath, fileName } = video
+          const s3Path = `gift/${requestId}/${fileName}`
+
           // Upload video to server
-          await S3Service.uploadToS3(fileName, filePath)
+          await S3Service.uploadToS3(s3Path, filePath)
           await fs.unlink(filePath)
         }
       }
@@ -67,8 +72,10 @@ export default class CheckoutsController {
       if (details.audios && Array.isArray(details.audios)) {
         for (const audio of details.audios) {
           const { filePath, fileName } = audio
+          const s3Path = `gift/${requestId}/${fileName}`
+
           // Upload audio to server
-          await S3Service.uploadToS3(fileName, filePath)
+          await S3Service.uploadToS3(s3Path, filePath)
           await fs.unlink(filePath)
         }
       }

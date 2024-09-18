@@ -12,7 +12,7 @@ export default class SessionController {
       // login user
       await auth.use('web').login(user)
       // redirect
-      return response.redirect().toRoute('home')  
+      return response.redirect().toRoute('home')
     } catch (error) {
       session.flash('notification', {
         type: 'error',

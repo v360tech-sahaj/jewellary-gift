@@ -3,7 +3,7 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import GiftRequest from './gift_request.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
-export default class GitRequestResource extends BaseModel {
+export default class GiftRequestResource extends BaseModel {
   static connection = 'mysql'
 
   @column({ isPrimary: true })
