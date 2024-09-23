@@ -130,97 +130,32 @@ export default class GiftRequest extends BaseModel {
 
         requestId = request.id
 
+        // Add request assets
         const assetCodes = Array.isArray(data.requestedAsset)
           ? data.requestedAsset
           : [data.requestedAsset]
 
-        // Add request assets
-        for (const assetCode of assetCodes) {
-          const asset = new GiftRequestAsset()
-          asset.request_id = request.id
-          asset.asset_code = assetCode
-          asset.useTransaction(trx)
-          await asset.save()
-          console.log('data added in assets')
-        }
+        await GiftRequestAsset.addAssets(assetCodes, requestId, trx)
 
         // Add request resources
-        // Handle and upload video details to db
         if (data.videos && Array.isArray(data.videos)) {
-          for (const video of data.videos) {
-            const resource = new GiftRequestResource()
-            resource.request_id = request.id
-            resource.resource_type = 'VIDEO'
-            resource.resource_key = video.fileName
-            resource.storage_path = `gift/${request.id}/${video.fileName}`
-            resource.meta = video.meta || null
-
-            resource.useTransaction(trx)
-            await resource.save()
-            console.log(`${video.fileName} added in resources`)
-          }
+          await GiftRequestResource.storeResources(data.videos, requestId, 'VIDEO', trx)
         }
 
-        // Handle and upload audio details to db
         if (data.audios && Array.isArray(data.audios)) {
-          for (const audio of data.audios) {
-            const resource = new GiftRequestResource()
-            resource.request_id = request.id
-            resource.resource_type = 'AUDIO'
-            resource.resource_key = audio.fileName
-            resource.storage_path = `gift/${request.id}/${audio.fileName}`
-            resource.meta = audio.meta || null
-
-            resource.useTransaction(trx)
-            await resource.save()
-            console.log(`${audio.fileName} added in resources`)
-          }
+          await GiftRequestResource.storeResources(data.audios, requestId, 'AUDIO', trx)
         }
 
-        // Handle and upload image details to db
         if (data.images && Array.isArray(data.images)) {
-          for (const image of data.images) {
-            const resource = new GiftRequestResource()
-            resource.request_id = request.id
-            resource.resource_type = 'PHOTO'
-            resource.resource_key = image.fileName
-            resource.storage_path = `gift/${request.id}/${image.fileName}`
-            resource.meta = image.meta || null
-
-            resource.useTransaction(trx)
-            await resource.save()
-            console.log(`${image.fileName} added in resource`)
-          }
+          await GiftRequestResource.storeResources(data.images, requestId, 'PHOTO', trx)
         }
 
-        // Upload messages to db
-        if (data.messages && Array.isArray(data.messages)) {
-          for (const message of data.messages) {
-            const resource = new GiftRequestResource()
-            resource.request_id = request.id
-            resource.resource_type = 'TEXT'
-            resource.content = message
-
-            resource.useTransaction(trx)
-            await resource.save()
-            console.log(`message added in resources`)
-          }
-        }
-
-        // Handle and upload file details to db
         if (data.files && Array.isArray(data.files)) {
-          for (const file of data.files) {
-            const resource = new GiftRequestResource()
-            resource.request_id = request.id
-            resource.resource_type = 'DOC'
-            resource.resource_key = file.fileName
-            resource.storage_path = `gift/${request.id}/${file.fileName}`
-            resource.meta = file.meta || null
+          await GiftRequestResource.storeResources(data.files, requestId, 'DOC', trx)
+        }
 
-            resource.useTransaction(trx)
-            await resource.save()
-            console.log(`${file.fileName} added in resources`)
-          }
+        if (data.messages && Array.isArray(data.messages)) {
+          await GiftRequestResource.storeMessages(data.messages, requestId, trx)
         }
       })
     } catch (error) {

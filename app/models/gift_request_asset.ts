@@ -34,4 +34,18 @@ export default class GiftRequestAsset extends BaseModel {
 
   @belongsTo(() => GraphicsAsset, { foreignKey: 'graphics_asset_id' })
   declare graphicsAssetId: BelongsTo<typeof GraphicsAsset>
+
+  // add assets
+  static async addAssets(assetCodes: any[], requestId: number, trx: any) {
+    const assetPromises = assetCodes.map(async (assetCode) => {
+      const asset = new GiftRequestAsset()
+      asset.request_id = requestId
+      asset.asset_code = assetCode
+      asset.useTransaction(trx)
+      await asset.save()
+      console.log('data added in assets')
+    })
+
+    await Promise.all(assetPromises)
+  }
 }

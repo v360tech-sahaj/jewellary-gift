@@ -36,48 +36,30 @@ export default class CheckoutsController {
     const requestId = await GiftRequest.add(payload)
 
     try {
-      if (details.files && Array.isArray(details.files)) {
-        for (const file of details.files) {
-          const { filePath, clientName } = file
-          const s3Path = `gift/${requestId}/${clientName}`
+      const uploadResources = async (items: any) => {
+        for (const item of items) {
+          const { filePath, fileName } = item
+          const s3Path = `gift/${requestId}/${fileName}`
 
-          // Upload file to server
           await S3Service.uploadToS3(s3Path, filePath)
           await fs.unlink(filePath)
         }
+      }
+
+      if (details.files && Array.isArray(details.files)) {
+        await uploadResources(details.files)
       }
 
       if (details.images && Array.isArray(details.images)) {
-        for (const image of details.images) {
-          const { filePath, clientName } = image
-          const s3Path = `gift/${requestId}/${clientName}`
-
-          // Upload image to server
-          await S3Service.uploadToS3(s3Path, filePath)
-          await fs.unlink(filePath)
-        }
+        await uploadResources(details.images)
       }
 
       if (details.videos && Array.isArray(details.videos)) {
-        for (const video of details.videos) {
-          const { filePath, fileName } = video
-          const s3Path = `gift/${requestId}/${fileName}`
-
-          // Upload video to server
-          await S3Service.uploadToS3(s3Path, filePath)
-          await fs.unlink(filePath)
-        }
+        await uploadResources(details.videos)
       }
 
       if (details.audios && Array.isArray(details.audios)) {
-        for (const audio of details.audios) {
-          const { filePath, fileName } = audio
-          const s3Path = `gift/${requestId}/${fileName}`
-
-          // Upload audio to server
-          await S3Service.uploadToS3(s3Path, filePath)
-          await fs.unlink(filePath)
-        }
+        await uploadResources(details.audios)
       }
       await fs.rmdir(`uploads/${gsId}`)
     } catch (error) {

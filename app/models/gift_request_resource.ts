@@ -3,6 +3,8 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import GiftRequest from './gift_request.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
+type ResourceType = 'AUDIO' | 'VIDEO' | 'PHOTO' | 'TEXT' | 'DOC'
+
 export default class GiftRequestResource extends BaseModel {
   static connection = 'mysql'
 
@@ -35,4 +37,39 @@ export default class GiftRequestResource extends BaseModel {
 
   @belongsTo(() => GiftRequest, { foreignKey: 'request_id' })
   declare retailerId: BelongsTo<typeof GiftRequest>
+
+  static async storeResources(items: any[], requestId: number, type: ResourceType, trx: any) {
+    const resourcePromises = items.map(async (item: any) => {
+      const resource = new GiftRequestResource()
+      resource.request_id = requestId
+      resource.resource_type = type
+      if (type === 'TEXT') {
+        resource.content = item
+      } else {
+        resource.resource_key = item.fileName
+        resource.storage_path = `gift/${requestId}/${item.fileName}`
+        resource.meta = item.meta
+      }
+      resource.useTransaction(trx)
+      await resource.save()
+    })
+
+    await Promise.all(resourcePromises)
+  }
+
+  // add request resources
+  static async storeMessages(messages: string[], requestId: number, trx: any) {
+    const messagePromises = messages
+      .filter((message) => message != null)
+      .map(async (message) => {
+        const resource = new GiftRequestResource()
+        resource.request_id = requestId
+        resource.resource_type = 'TEXT'
+        resource.content = message
+        resource.useTransaction(trx)
+        await resource.save()
+      })
+
+    await Promise.all(messagePromises)
+  }
 }

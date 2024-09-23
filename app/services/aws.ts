@@ -15,7 +15,7 @@ export default class S3Service {
 
       await s3Client.send(
         new AWS.PutObjectCommand({
-          Bucket: 'v360-test',
+          Bucket: process.env.S3_BUCKET,
           Key: s3Path,
           Body: file,
         })
