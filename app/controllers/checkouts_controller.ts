@@ -73,7 +73,7 @@ export default class CheckoutsController {
     let giftSession = session.get(gsId)
     console.log('Gift Session :', giftSession)
 
-    session.clear()
+    session.forget(gsId)
     return response.redirect().toRoute('home')
   }
 }
