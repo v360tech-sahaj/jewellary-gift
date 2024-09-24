@@ -38,7 +38,7 @@ export default class GiftRequestResource extends BaseModel {
   @belongsTo(() => GiftRequest, { foreignKey: 'request_id' })
   declare retailerId: BelongsTo<typeof GiftRequest>
 
-  static async storeResources(items: any[], requestId: number, type: ResourceType, trx: any) {
+  static async storeMultipleResources(items: any[], requestId: number, type: ResourceType, trx: any) {
     const resourcePromises = items.map(async (item: any) => {
       const resource = new GiftRequestResource()
       resource.request_id = requestId
@@ -58,7 +58,7 @@ export default class GiftRequestResource extends BaseModel {
   }
 
   // add request resources
-  static async storeMessages(messages: string[], requestId: number, trx: any) {
+  static async storeSingleResource(messages: string[], requestId: number, trx: any) {
     const messagePromises = messages
       .filter((message) => message != null)
       .map(async (message) => {

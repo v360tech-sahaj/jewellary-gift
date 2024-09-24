@@ -32,7 +32,7 @@ docReady(function () {
   }
 
   function findEmptyAssetBox() {
-    const assetBoxes = document.getElementsByName('assetNumbers');
+    const assetBoxes = document.getElementsByName('assetIdentifiers');
     for (var i = 0; i < assetBoxes.length; i++) {
       if (assetBoxes[i].value === '') {
         return assetBoxes[i];
@@ -48,7 +48,7 @@ docReady(function () {
       const newAssetBox = `
           <div class="asset-box mb-3">
             <div class="control level is-mobile has-icons-left mb-2">
-              <input class="input" type="text" name="assetNumbers[]" placeholder="Enter asset number" value="${value}" required>
+              <input class="input" type="text" name="assetIdentifiers[]" placeholder="Enter asset number" value="${value}" required>
               <span class="icon is-small is-left">
                 <i class="fas fa-pen"></i>
               </span>

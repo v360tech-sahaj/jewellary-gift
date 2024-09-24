@@ -3,7 +3,7 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import GiftRequest from './gift_request.js'
 import GraphicsAsset from './graphics_asset.js'
-import AssetsProAsset from './assets_pro_asset.js'
+import AssetProAssets from './asset_pro_assets.js'
 
 export default class GiftRequestAsset extends BaseModel {
   static connection = 'mysql'
@@ -29,14 +29,20 @@ export default class GiftRequestAsset extends BaseModel {
   @belongsTo(() => GiftRequest, { foreignKey: 'request_id' })
   declare requestId: BelongsTo<typeof GiftRequest>
 
-  @belongsTo(() => AssetsProAsset, { foreignKey: 'asset_code' })
-  declare assetCode: BelongsTo<typeof AssetsProAsset>
+  @belongsTo(() => AssetProAssets, { foreignKey: 'asset_code' })
+  declare assetCode: BelongsTo<typeof AssetProAssets>
 
   @belongsTo(() => GraphicsAsset, { foreignKey: 'graphics_asset_id' })
   declare graphicsAssetId: BelongsTo<typeof GraphicsAsset>
 
   // add assets
-  static async addAssets(assetCodes: any[], requestId: number, trx: any) {
+  static async addAssets(assetIdentifiers: any[], requestId: number, trx: any) {
+    let assetCodes: number[] = []
+    if (assetIdentifiers && Array.isArray(assetIdentifiers)) {
+      const assets = await AssetProAssets.query().whereIn('identifier', assetIdentifiers)
+      assetCodes = assets.map((asset) => asset.code)
+    }
+
     const assetPromises = assetCodes.map(async (assetCode) => {
       const asset = new GiftRequestAsset()
       asset.request_id = requestId

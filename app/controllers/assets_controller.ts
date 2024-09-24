@@ -15,22 +15,22 @@ export default class AssetsController {
     const gsId = request.param('gsId')
 
     const details = session.get(gsId)
-    const assetNumbers = details['assetNumbers']
+    const assetIdentifiers = details['assetIdentifiers']
 
-    return view.render('pages/assets/create', { gsId, assetNumbers })
+    return view.render('pages/assets/create', { gsId, assetIdentifiers })
   }
 
   public async store({ request, response, session }: HttpContext) {
     const gsId = request.param('gsId')
 
-    let assetNumbers = request.input('assetNumbers')
-    if (!Array.isArray(assetNumbers)) {
-      assetNumbers = [assetNumbers]
+    let assetIdentifiers = request.input('assetIdentifiers')
+    if (!Array.isArray(assetIdentifiers)) {
+      assetIdentifiers = [assetIdentifiers]
     }
 
     //put asset numbers in session
     let details = session.get(gsId)
-    details = { ...details, assetNumbers }
+    details = { ...details, assetIdentifiers }
 
     session.put(gsId, details)
 

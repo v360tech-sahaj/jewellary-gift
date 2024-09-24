@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class AssetsProAsset extends BaseModel {
+export default class AssetProAssets extends BaseModel {
   static connection = 'console'
 
   @column({ isPrimary: true })
@@ -9,6 +9,9 @@ export default class AssetsProAsset extends BaseModel {
 
   @column()
   declare id: string
+
+  @column()
+  declare identifier: string
 
   @column()
   declare asset_name: string

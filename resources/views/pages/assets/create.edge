@@ -13,11 +13,11 @@
 
     <div class="box">
       <div id="asset-container">
-        @if(assetNumbers && assetNumbers.length > 0)
+        @if(assetIdentifiers && assetIdentifiers.length > 0)
         {{-- Qr Scanner --}}
         <div id="qr-reader" class="is-centered"></div>
         <div class="divider my-2">OR</div>
-        @each(assetNumber in assetNumbers)
+        @each(assetNumber in assetIdentifiers)
         {{-- Asset Box --}}
         @component('pages/assets/asset', {value: assetNumber})
         @end
@@ -107,7 +107,7 @@
     }
 
     function findEmptyAssetBox() {
-      const assetBoxes = document.getElementsByName('assetNumbers');
+      const assetBoxes = document.getElementsByName('assetIdentifiers');
       for (var i = 0; i < assetBoxes.length; i++) {
         if (assetBoxes[i].value === '') {
           return assetBoxes[i];
@@ -123,7 +123,7 @@
         const newAssetBox = `
           <div class="asset-box mb-3">
             <div class="control level is-mobile has-icons-left mb-2">
-              <input class="input" type="text" name="assetNumbers" placeholder="Enter asset number" value="${value}" required>
+              <input class="input" type="text" name="assetIdentifiers" placeholder="Enter asset number" value="${value}" required>
               <span class="icon is-small is-left">
                 <i class="fas fa-pen"></i>
               </span>

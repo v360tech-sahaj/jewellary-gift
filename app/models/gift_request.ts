@@ -131,31 +131,31 @@ export default class GiftRequest extends BaseModel {
         requestId = request.id
 
         // Add request assets
-        const assetCodes = Array.isArray(data.requestedAsset)
+        const assetIdentifiers = Array.isArray(data.requestedAsset)
           ? data.requestedAsset
           : [data.requestedAsset]
 
-        await GiftRequestAsset.addAssets(assetCodes, requestId, trx)
+        await GiftRequestAsset.addAssets(assetIdentifiers, requestId, trx)
 
         // Add request resources
         if (data.videos && Array.isArray(data.videos)) {
-          await GiftRequestResource.storeResources(data.videos, requestId, 'VIDEO', trx)
+          await GiftRequestResource.storeMultipleResources(data.videos, requestId, 'VIDEO', trx)
         }
 
         if (data.audios && Array.isArray(data.audios)) {
-          await GiftRequestResource.storeResources(data.audios, requestId, 'AUDIO', trx)
+          await GiftRequestResource.storeMultipleResources(data.audios, requestId, 'AUDIO', trx)
         }
 
         if (data.images && Array.isArray(data.images)) {
-          await GiftRequestResource.storeResources(data.images, requestId, 'PHOTO', trx)
+          await GiftRequestResource.storeMultipleResources(data.images, requestId, 'PHOTO', trx)
         }
 
         if (data.files && Array.isArray(data.files)) {
-          await GiftRequestResource.storeResources(data.files, requestId, 'DOC', trx)
+          await GiftRequestResource.storeMultipleResources(data.files, requestId, 'DOC', trx)
         }
 
         if (data.messages && Array.isArray(data.messages)) {
-          await GiftRequestResource.storeMessages(data.messages, requestId, trx)
+          await GiftRequestResource.storeSingleResource(data.messages, requestId, trx)
         }
       })
     } catch (error) {

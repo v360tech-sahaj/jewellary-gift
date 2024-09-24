@@ -25,7 +25,7 @@ export default class CheckoutsController {
       code: ulid(),
       consumer_id: consumerId,
       template_id: details.templateId,
-      requestedAsset: details.assetNumbers,
+      requestedAsset: details.assetIdentifiers,
       files: details.files,
       images: details.images,
       videos: details.videos,
